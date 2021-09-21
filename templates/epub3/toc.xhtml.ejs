@@ -13,14 +13,14 @@
         <% content.forEach(function(content, index){ %>
             <% if(!content.excludeFromToc && content.beforeToc){ %>
                 <li class="table-of-content">
-                    <a href="<%= content.href %>"><%= (content.title || "Chapter "+ (1+index)) %><% if(content.author.length){ %> - <small class="toc-author"><%= content.author.join(",") %></small><% }%><% if(content.url){ %><span class="toc-link"><%= content.url %></span><% }%></a>
+                    <a href="<%= content.filename %>"><%= (content.title || "Chapter "+ (1+index)) %><% if(content.author.length){ %> - <small class="toc-author"><%= content.author.join(",") %></small><% }%><% if(content.url){ %><span class="toc-link"><%= content.url %></span><% }%></a>
                 </li>
             <% } %>
         <% }) %>
         <% content.forEach(function(content, index){ %>
             <% if(!content.excludeFromToc && !content.beforeToc){ %>
                 <li class="table-of-content">
-                    <a href="<%= content.href %>"><%= (content.title || "Chapter "+ (1+index)) %><% if(content.author.length){ %> - <small class="toc-author"><%= content.author.join(",") %></small><% }%><% if(content.url){ %><span class="toc-link"><%= content.url %></span><% }%></a>
+                    <a href="<%= content.filename %>"><%= (content.title || "Chapter "+ (1+index)) %><% if(content.author.length){ %> - <small class="toc-author"><%= content.author.join(",") %></small><% }%><% if(content.url){ %><span class="toc-link"><%= content.url %></span><% }%></a>
                 </li>
             <% } %>
         <% }) %>
