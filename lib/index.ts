@@ -1,6 +1,5 @@
 import { remove as removeDiacritics } from 'diacritics';
 import { render as renderTemplate } from 'ejs';
-import 'isomorphic-fetch';
 import jszip from 'jszip';
 import { getExtension, getType } from 'mime';
 import chapterXHTML from 'templates/chapter.xhtml.ejs.js';
@@ -9,8 +8,8 @@ import tocXHTML2 from 'templates/epub2/toc.xhtml.ejs.js';
 import contentOpf3 from 'templates/epub3/content.opf.ejs.js';
 import tocXHTML3 from 'templates/epub3/toc.xhtml.ejs.js';
 import tocNcx from 'templates/toc.ncx.ejs.js';
-import uslug from 'uslug';
-import { Image, normalizeHTML, normName, NormOptions, Options, uuid, validateAndNormalizeOptions } from './util';
+import { Image, normalizeHTML, NormOptions, Options, uuid, validateAndNormalizeChapter, validateAndNormalizeOptions } from './util';
+import fetchable, { type } from './util/fetchable';
 
 export { Options };
 
@@ -50,25 +49,8 @@ export class EPub {
         this.cover = { mediaType, extension };
     }
 
-    this.mapChapters();
-  }
-
-  private mapChapters() {
-    this.options.content.forEach((chapter, index) => {
-      chapter.title ||= 'no title';
-      chapter.url ||= '';
-      const slug = uslug(removeDiacritics(chapter.title))
-      if (!chapter.filename) {
-        chapter.filename = `${index}_${slug}.xhtml`;
-      } else if (!chapter.filename.endsWith('.xhtml')) {
-        chapter.filename = `${chapter.filename}.xhtml`;
-      }
-      chapter.id = `item_${index}`;
-      chapter.excludeFromToc ||= false
-      chapter.beforeToc ||= false
-      chapter.author = normName(chapter.author);
-      chapter.content = normalizeHTML.call(this, index, chapter.content);
-    });
+    this.options.content.forEach(validateAndNormalizeChapter);
+    this.options.content.forEach((chapter, index) => chapter.content = normalizeHTML.call(this, index, chapter.content));
   }
 
   async render() {
@@ -127,7 +109,7 @@ export class EPub {
     const fonts = oebps.folder('fonts')!;
     const fontContents = await Promise.all(
       this.options.fonts.map(font =>
-        fetch(font).then(res => res.arrayBuffer()).then(res => (this.log(`Downloaded font ${font}`), { font, data: res })))
+        fetchable(font).then(res => (this.log(`Downloaded font ${font}`), { font, data: res })))
     );
     fontContents.forEach(font => fonts.file(font.font, font.data));
   }
@@ -138,7 +120,7 @@ export class EPub {
     const images = oebps.folder('images')!;
     const imageContents = await Promise.all(
       this.images.map(image =>
-        fetch(image.url).then(res => res.arrayBuffer()).then(res => (this.log(`Downloaded image ${image.url}`), { ...image, data: res }))
+        fetchable(image.url).then(res => (this.log(`Downloaded image ${image.url}`), { ...image, data: res }))
       )
     );
     imageContents.forEach(image => images.file(`${image.id}.${image.extension}`, image.data));
@@ -147,13 +129,13 @@ export class EPub {
   private async makeCover() {
     if (!this.cover) return this.log('No cover to download');
     const oebps = this.zip.folder('OEBPS')!;
-    const coverContent = await fetch(this.options.cover).then(res => res.arrayBuffer());
+    const coverContent = await fetchable(this.options.cover);
     oebps.file(`cover.${this.cover.extension}`, coverContent);
   }
 
   private async genEpub() {
     return await this.zip.generateAsync({
-      type: 'arraybuffer',
+      type,
       mimeType: 'application/epub+zip',
       compression: 'DEFLATE',
       compressionOptions: {

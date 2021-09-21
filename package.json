@@ -2,14 +2,21 @@
   "name": "epub-gen",
   "version": "0.1.0",
   "description": "A library to generate EPUB from HTML",
-  "main": "dist/index.js",
+  "main": "dist/lib/index.js",
+  "unpkg": "dist/bundle.js",
+  "main:umd": "dist/bundle.js",
+  "browser": {
+    "./dist/lib/util/fetchable.js": "./dist/lib/util/fetchable-browser.js"
+  },
   "scripts": {
     "prebuild": "node scripts/templates.js",
     "build": "tsc && tsc-alias",
+    "bundle": "browserify --debug -e ./dist/lib/SharedArrayBufferStub.js -e ./dist/lib/index.js -s epub-gen -o dist/bundle.js && terser --mangle --compress --comments false -o dist/bundle.min.js -- dist/bundle.js",
     "dev": "tsc -w & tsc-alias -w",
     "run-map": "node -r source-map-support/register --unhandled-rejections=strict",
     "test": "npm run run-map -- dist/tests/alice.js && npm run run-map -- dist/tests/alice2.js",
-    "clean": "rimraf dist lib/templates *.epub"
+    "clean": "rimraf dist lib/templates *.epub",
+    "prepack": "npm run clean && npm run build && npm run bundle"
   },
   "repository": {
     "type": "git",
@@ -31,10 +38,10 @@
   "dependencies": {
     "diacritics": "^1.3.0",
     "ejs": "^3.1.6",
-    "isomorphic-fetch": "^3.0.0",
     "jsdom": "^17.0.0",
     "jszip": "^3.7.1",
     "mime": "^2.5.2",
+    "node-fetch": "^2.0.0",
     "ow": "^0.27.0",
     "uslug": "^1.0.4"
   },
@@ -43,11 +50,14 @@
     "@types/ejs": "^3.1.0",
     "@types/jsdom": "^16.2.13",
     "@types/mime": "^2.0.3",
+    "@types/node-fetch": "^2.0.0",
     "@types/uslug": "^1.0.1",
+    "browserify": "^17.0.0",
     "chalk": "^4.1.2",
     "dree": "^2.8.3",
     "rimraf": "^3.0.2",
     "source-map-support": "^0.5.20",
+    "terser": "^5.9.0",
     "tsc-alias": "^1.3.9",
     "type-fest": "^2.3.4",
     "typescript": "^4.4.3"
