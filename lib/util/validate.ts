@@ -41,17 +41,22 @@ export const validateOptions = ow.create('options', ow.object.exactShape({
   publisher: ow.optional.string,
   description: ow.optional.string,
   cover: ow.optional.string,
-  content: ow.array.ofType(chapter),
   tocTitle: ow.optional.string,
   prependChapterTitles: ow.optional.boolean,
   date: ow.optional.string,
   lang: ow.optional.string,
   css: ow.optional.string,
+  chapterXHTML: ow.optional.string,
+  contentOPF: ow.optional.string,
+  tocNCX: ow.optional.string,
+  tocXHTML: ow.optional.string,
   fonts: ow.optional.any(ow.array.ofType(font), ow.undefined),
   version: ow.optional.number.is(x => x === 3 || x === 2 ||
     `Expected version to be 3 or 2, got \`${x}\``),
   verbose: ow.optional.boolean,
 }));
+
+export const validateChapters = ow.create('chapters', ow.array.ofType(chapter));
 
 export type Options = (typeof validateOptions) extends ReusableValidator<infer R> ? MakeOptionalObject<R> : never;
 export type Chapter = (typeof chapter) extends ObjectPredicate<infer R> ? MakeOptionalObject<R> : never;
@@ -62,8 +67,9 @@ export type NormOptions = NonNullableObject<
     fonts: ({
       mediaType: string | null,
     } & Font)[],
-    content: Merge<Chapter, {
-      id: string,
-      author: string[],
-    }>[],
   }>>;
+export type NormChapters = NonNullableObject<
+  Merge<Chapter, {
+    id: string,
+    author: string[],
+  }>>[];

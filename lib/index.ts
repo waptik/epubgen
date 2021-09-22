@@ -2,20 +2,17 @@ import { remove as removeDiacritics } from 'diacritics';
 import { render as renderTemplate } from 'ejs';
 import jszip from 'jszip';
 import { getExtension, getType } from 'mime';
-import chapterXHTML2 from 'templates/epub2/chapter.xhtml.ejs.js';
-import contentOpf2 from 'templates/epub2/content.opf.ejs.js';
-import tocXHTML2 from 'templates/epub2/toc.xhtml.ejs.js';
-import chapterXHTML3 from 'templates/epub3/chapter.xhtml.ejs.js';
-import contentOpf3 from 'templates/epub3/content.opf.ejs.js';
-import tocXHTML3 from 'templates/epub3/toc.xhtml.ejs.js';
-import tocNcx from 'templates/toc.ncx.ejs.js';
-import { Image, normalizeHTML, NormOptions, Options, uuid, validateAndNormalizeChapter, validateAndNormalizeOptions } from './util';
+import { Image, NormOptions, Options, uuid, validateAndNormalizeChapters, validateAndNormalizeOptions } from './util';
 import fetchable, { type } from './util/fetchable';
+import { Chapter, NormChapters } from './util/validate';
 
-export { Options };
+
+type Content = Chapter[];
+export { Options, Content, Chapter };
 
 export class EPub {
   protected options: NormOptions;
+  protected content: NormChapters;
   protected uuid: string;
   protected images: Image[] = [];
   protected cover?: { extension: string, mediaType: string };
@@ -23,9 +20,10 @@ export class EPub {
   protected log: typeof console.log;
   protected zip: InstanceType<jszip>;
 
-  constructor(options: Options) {
+  constructor(options: Options, content: Chapter[]) {
     this.options = validateAndNormalizeOptions(options);
     this.options.lang = removeDiacritics(this.options.lang);
+    this.content = validateAndNormalizeChapters.call(this, content);
     this.uuid = uuid();
 
     this.log = this.options.verbose ? console.log : () => {};
@@ -38,9 +36,6 @@ export class EPub {
       if (mediaType && extension)
         this.cover = { mediaType, extension };
     }
-
-    this.options.content.forEach(validateAndNormalizeChapter);
-    this.options.content.forEach((chapter, index) => chapter.content = normalizeHTML.call(this, index, chapter.content));
   }
 
   async render() {
@@ -62,9 +57,8 @@ export class EPub {
     const oebps = this.zip.folder('OEBPS')!;
     oebps.file('style.css', this.options.css);
     
-    const chapterXHTML = this.options.version === 2 ? chapterXHTML2 : chapterXHTML3;
-    this.options.content.forEach(chapter => {
-      const rendered = renderTemplate(chapterXHTML, {
+    this.content.forEach(chapter => {
+      const rendered = renderTemplate(this.options.chapterXHTML, {
         lang: this.options.lang,
         prependChapterTitles: this.options.prependChapterTitles,
         ...chapter,
@@ -85,13 +79,12 @@ export class EPub {
       id: this.uuid,
       images: this.images,
       cover: this.cover,
+      content: this.content,
     };
 
-    const contentOpf = this.options.version === 2 ? contentOpf2 : contentOpf3;
-    oebps.file('content.opf', renderTemplate(contentOpf, opt));
-    oebps.file('toc.ncx', renderTemplate(tocNcx, opt));
-    const tocXHTML = this.options.version === 2 ? tocXHTML2 : tocXHTML3;
-    oebps.file('toc.xhtml', renderTemplate(tocXHTML, opt));
+    oebps.file('content.opf', renderTemplate(this.options.contentOPF, opt));
+    oebps.file('toc.ncx', renderTemplate(this.options.tocNCX, opt));
+    oebps.file('toc.xhtml', renderTemplate(this.options.tocXHTML, opt));
   }
 
   private async downloadAllFonts() {
@@ -136,8 +129,5 @@ export class EPub {
   }
 }
 
-const epub = (options: Options) => {
-  const e = new EPub(options);
-  return e.render();
-};
+const epub = (options: Options, content: Chapter[]) => new EPub(options, content).render();
 export default epub;

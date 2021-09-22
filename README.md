@@ -42,12 +42,19 @@ The package also includes a [browserify](https://www.npmjs.com/package/browserif
     import epub from 'epub-gen-memory/bundle';
 ```
 
+**Note**: This library was written in TypeScript and thus uses ESM exports, but it was compiled to CommonJS, so you can also use
+
+```js
+    const epub = require('epub-gen-memory').default;
+```
+
 
 ## API
 
-### `epub(options)`
+### `epub(options, content)`
 
-- `options` Options (includes data)
+- `options`: `Options`
+- `content`: `Chapter[]` (see [below](#chapters))
 - Returns: `Promise<Buffer>`
 - **Browser** Returns: `Promise<Blob>`
 
@@ -64,8 +71,6 @@ The package also includes a [browserify](https://www.npmjs.com/package/browserif
     Book description
 - `cover`: `string` (optional)
     Book cover image URL, e.g. `"http://abc.com/book-cover.jpg"`
-- `content`: `Chapter[]`
-    Contents of the book, see below
 - `tocTitle`: `string` (optional, default `Table of Contents`)
     Title of the Table of Contents
 - `prependChapterTitles`: `boolean` (optional, default `true`)
@@ -77,9 +82,9 @@ The package also includes a [browserify](https://www.npmjs.com/package/browserif
 - `css`: `string` (optional)
     CSS string, replaces our default styles, e.g: `"body{background: #000}"`
 - `fonts`: `Font[]` (optional)
-    Array of fonts to include, see below
+    Array of fonts to include, see [below](#fonts)
 - `version`: `number` (optional, default `3`)
-    Version of the generated EPUB, `3` the latest version (http://idpf.org/epub/30) or `2` the previous version (http://idpf.org/epub/201)
+    Version of the generated EPUB, `3` for the latest version (http://idpf.org/epub/30) or `2` for the previous version (http://idpf.org/epub/201)
 - `verbose`: `boolean` (optional, default `false`)
     Whether to log progress messages
 
