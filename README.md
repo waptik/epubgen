@@ -28,13 +28,15 @@ Then put this in your code:
     );
 ```
 
-In environments where `Shared ArrayBuffer` is not available, you might want to instead import from `epub-gen-memory/sabstub`, which includes a non-functional stub:
+See [https://github.com/Stuk/jszip/blob/master/documentation/howto/write_zip.md](JSZip documentation) on how to get the zip to the user. For a nodejs example please see the tests.
+
+In environments where `SharedArrayBuffer` is not available, you might want to instead import from `epub-gen-memory/sabstub`, which includes a non-functional stub:
 
 ```js
     import epub from 'epub-gen-memory/sabstub';
 ```
 
-The package also includes a [browserify](https://www.npmjs.com/package/browserify)d bundle (UMD) as `epub-gen-memory/bundle`. It is recommended to use the bundle if you want to build for the browser. The bundle is also available from a CDN: [UNPKG](https://unpkg.com/epub-gen-memory).
+The package also includes a [browserify](https://www.npmjs.com/package/browserify)d bundle (UMD) as `epub-gen-memory/bundle`. It is recommended to use the bundle if you want to build for the browser. The bundle is also available from a CDN: [UNPKG](https://unpkg.com/epub-gen-memory). The bundle also includes the proper return type for the browser (`Blob` instead of `Buffer`).
 
 ```js
     import epub from 'epub-gen-memory/bundle';

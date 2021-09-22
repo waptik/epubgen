@@ -1,4 +1,4 @@
 {
   "main": "../dist/bundle.js",
-  "types": "../dist/lib/index.d.ts"
+  "types": "./index.d.ts"
 }
