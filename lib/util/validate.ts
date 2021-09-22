@@ -43,7 +43,7 @@ export const validateOptions = ow.create('options', ow.object.exactShape({
   cover: ow.optional.string,
   content: ow.array.ofType(chapter),
   tocTitle: ow.optional.string,
-  appendChapterTitles: ow.optional.boolean,
+  prependChapterTitles: ow.optional.boolean,
   date: ow.optional.string,
   lang: ow.optional.string,
   css: ow.optional.string,

@@ -16,7 +16,7 @@ export const optionsDefaults = {
   author: ['anonymous'],
   publisher: 'anonymous',
   tocTitle: 'Table of Contents',
-  appendChapterTitles: true,
+  prependChapterTitles: true,
   date: new Date().toISOString(),
   lang: "en",
   css,
@@ -44,7 +44,8 @@ export const validateAndNormalizeOptions = (options: Options) => {
     ...options as Partial<Options>,
   } as NormOptions;
   opt.author = normName(opt.author);
-  opt.fonts.forEach(font => font.mediaType = getType(font.url.replace(/\?.*/, ""))!)
+  opt.fonts.forEach(font => font.mediaType = getType(font.url.replace(/\?.*/, ""))!);
+  opt.date = new Date(opt.date).toISOString();
   return opt;
 };
 

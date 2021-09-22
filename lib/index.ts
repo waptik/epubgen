@@ -2,9 +2,10 @@ import { remove as removeDiacritics } from 'diacritics';
 import { render as renderTemplate } from 'ejs';
 import jszip from 'jszip';
 import { getExtension, getType } from 'mime';
-import chapterXHTML from 'templates/chapter.xhtml.ejs.js';
+import chapterXHTML2 from 'templates/epub2/chapter.xhtml.ejs.js';
 import contentOpf2 from 'templates/epub2/content.opf.ejs.js';
 import tocXHTML2 from 'templates/epub2/toc.xhtml.ejs.js';
+import chapterXHTML3 from 'templates/epub3/chapter.xhtml.ejs.js';
 import contentOpf3 from 'templates/epub3/content.opf.ejs.js';
 import tocXHTML3 from 'templates/epub3/toc.xhtml.ejs.js';
 import tocNcx from 'templates/toc.ncx.ejs.js';
@@ -16,7 +17,6 @@ export { Options };
 export class EPub {
   protected options: NormOptions;
   protected uuid: string;
-  protected docHeader: string;
   protected images: Image[] = [];
   protected cover?: { extension: string, mediaType: string };
 
@@ -30,17 +30,7 @@ export class EPub {
 
     this.log = this.options.verbose ? console.log : () => {};
     this.zip = new jszip();
-    this.zip.file('mimetype', 'application/epub+zip');
-
-    if (this.options.version === 2) {
-      this.docHeader = `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="${this.options.lang}">`;
-    } else {
-      this.docHeader = `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="${this.options.lang}">`;
-    }
+    this.zip.file('mimetype', 'application/epub+zip', { compression: 'STORE' });
 
     if (this.options.cover) {
       const mediaType = getType(this.options.cover);
@@ -72,10 +62,11 @@ export class EPub {
     const oebps = this.zip.folder('OEBPS')!;
     oebps.file('style.css', this.options.css);
     
+    const chapterXHTML = this.options.version === 2 ? chapterXHTML2 : chapterXHTML3;
     this.options.content.forEach(chapter => {
       const rendered = renderTemplate(chapterXHTML, {
-        docHeader: this.docHeader,
-        appendChapterTitles: this.options.appendChapterTitles,
+        lang: this.options.lang,
+        prependChapterTitles: this.options.prependChapterTitles,
         ...chapter,
       });
       oebps.file(chapter.filename, rendered);
@@ -98,7 +89,7 @@ export class EPub {
 
     const contentOpf = this.options.version === 2 ? contentOpf2 : contentOpf3;
     oebps.file('content.opf', renderTemplate(contentOpf, opt));
-    oebps.file('tox.ncx', renderTemplate(tocNcx, opt));
+    oebps.file('toc.ncx', renderTemplate(tocNcx, opt));
     const tocXHTML = this.options.version === 2 ? tocXHTML2 : tocXHTML3;
     oebps.file('toc.xhtml', renderTemplate(tocXHTML, opt));
   }

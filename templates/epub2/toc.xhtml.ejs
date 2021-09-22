@@ -3,22 +3,21 @@
 <html xml:lang="<%- lang %>" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title><%= title %></title>
-    <meta charset="UTF-8" />
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
-<h1 class="h1"><%= tocTitle %></h1>
-<% content.forEach(function(content, index){ %>
-    <% if(!content.excludeFromToc){ %>
-        <p class="table-of-content">
-            <a href="<%= content.filename %>"><%= (1+index) + ". " + (content.title || "Chapter "+ (1+index)) %>
-                <% if(content.author.length){ %>
-                - <small class="toc-author"><%= content.author.join(",") %></small>
-                <% } %>
-                <% if(content.url){ %><span class="toc-link"><%= content.url %></span><% }else{ %><span class="toc-link"></span><% } %>
-            </a>
-        </p>
-    <% } %>
-<% }) %>
+    <h1 class="h1"><%= tocTitle %></h1>
+    <% content.forEach(function(content, index){ %>
+        <% if(!content.excludeFromToc){ %>
+            <p class="table-of-content">
+                <a href="<%= content.filename %>"><%= (1+index) + ". " + content.title %>
+                    <% if(content.author.length){ %>
+                    - <small class="toc-author"><%= content.author.join(",") %></small>
+                    <% } %>
+                    <% if(content.url){ %><span class="toc-link"><%= content.url %></span><% }%>
+                </a>
+            </p>
+        <% } %>
+    <% }) %>
 </body>
 </html>

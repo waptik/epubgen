@@ -1,5 +1,6 @@
 import { JSDOM } from 'jsdom';
 import { getExtension, getType } from 'mime';
+import { serializeToString } from 'xmlserializer';
 import type { EPub } from '..';
 import { allowedAttributes, allowedXhtml11Tags } from './constants';
 import { uuid } from './other';
@@ -46,5 +47,5 @@ export function normalizeHTML(this: EPub, index: number, data: string) {
     element.src = `images/${image.id}.${image.extension}`;
   });
 
-  return document.body.innerHTML;
+  return serializeToString(document.body as unknown as import('parse5').Element).replace(/^<body xmlns="http:\/\/www\.w3\.org\/1999\/xhtml">|<\/body>$/g, '');
 }

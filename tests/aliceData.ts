@@ -1,10 +1,14 @@
 import type { Options } from '../lib';
 import { optionsDefaults } from '../lib/util';
 
+const date = new Date();
+date.setFullYear(2000);
+
 const optionsAlice: Options = {
   title: "Alice's Adventures in Wonderland",
   author: "Lewis Carroll",
   publisher: "Macmillan & Co.",
+  date: date.toString(),
   cover: "http://orig10.deviantart.net/e272/f/2013/255/0/0/alice_in_wonderland_book_cover_by_pannucabaguana-d6m003p.jpg",
   fonts: [
     { url: 'https://fonts.gstatic.com/s/lato/v20/S6uyw4BMUTPHjxAwXjeu.woff2', filename: 'lato-ext.woff2' },
@@ -37,7 +41,7 @@ const optionsAlice: Options = {
   content: [
     {
       title: "About the author",
-      content: `<img src="http://www.alice-in-wonderland.net/wp-content/uploads/1book1.jpg"/><p>Charles Lutwidge Dodgson (January 27, 1832 &#x2013; January 14, 1898), better known by the pen name Lewis Carroll, was an English author, mathematician, logician, Anglican clergyman, and photographer. His most famous writings are Alice&apos;s Adventures in Wonderland and its sequel Through the Looking-Glass as well as the poems &quot;The Hunting of the Snark&quot; and &quot;Jabberwocky&quot;, all considered to be within the genre of literary nonsense. His facility at word play, logic, and fantasy has delighted audiences ranging from children to the literary elite. But beyond this, his work has become embedded deeply in modern culture. He has directly influenced many artists. There are societies dedicated to the enjoyment and promotion of his works and the investigation of his life in many parts of the world including North America, Japan, the United Kingdom, and New Zealand. His biography has recently come under much question as a result of what some call the &quot;Carroll Myth.&quot;</p>`,
+      content: `<p><img src="http://www.alice-in-wonderland.net/wp-content/uploads/1book1.jpg"/><p>Charles Lutwidge Dodgson (January 27, 1832 &#x2013; January 14, 1898), better known by the pen name Lewis Carroll, was an English author, mathematician, logician, Anglican clergyman, and photographer. His most famous writings are Alice&apos;s Adventures in Wonderland and its sequel Through the Looking-Glass as well as the poems &quot;The Hunting of the Snark&quot; and &quot;Jabberwocky&quot;, all considered to be within the genre of literary nonsense. His facility at word play, logic, and fantasy has delighted audiences ranging from children to the literary elite. But beyond this, his work has become embedded deeply in modern culture. He has directly influenced many artists. There are societies dedicated to the enjoyment and promotion of his works and the investigation of his life in many parts of the world including North America, Japan, the United Kingdom, and New Zealand. His biography has recently come under much question as a result of what some call the &quot;Carroll Myth.&quot;</p>`,
       url: 'http://www.alice-in-wonderland.net',
       author: 'Charles Lutwidge Dodgson',
     },

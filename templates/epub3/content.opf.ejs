@@ -23,9 +23,8 @@
         <meta refines="#creator" property="file-as"><%= author.join(",") %></meta>
         <meta property="dcterms:publisher"><%= publisher %></meta>
         <dc:publisher><%= publisher %></dc:publisher>
-        <% var date = new Date(); var year = date.getFullYear(); var month = date.getMonth() + 1; var day = date.getDate(); var stringDate = "" + year + "-" + month + "-" + day; %>
-        <meta property="dcterms:date"><%= stringDate %></meta>
-        <dc:date><%= stringDate %></dc:date>
+        <meta property="dcterms:date"><%= date %></meta>
+        <dc:date><%= date %></dc:date>
         <meta property="dcterms:rights">All rights reserved</meta>
         <dc:rights>Copyright &#x00A9; <%= (new Date()).getFullYear() %> by <%= publisher %></dc:rights>
         <meta name="cover" content="image_cover"/>
@@ -36,7 +35,7 @@
 
     <manifest>
         <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml" />
-        <item id="toc" href="toc.xhtml" media-type="application/xhtml+xml" properties="nav"/>
+        <item id="toc" href="toc.xhtml" media-type="application/xhtml+xml" properties="nav" />
         <item id="css" href="style.css" media-type="text/css" />
 
         <% if(cover) { %>
