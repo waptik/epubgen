@@ -2,7 +2,7 @@
 
 Generate EPUB books from HTML with a simple API in Node.js or the browser.
 
-See [https://stuk.github.io/jszip/](JSZip Support table) for which engines are supported.
+See [JSZip Support table](https://stuk.github.io/jszip/) for which engines are supported.
 
 ------
 
@@ -28,7 +28,7 @@ Then put this in your code:
     );
 ```
 
-See [https://github.com/Stuk/jszip/blob/master/documentation/howto/write_zip.md](JSZip documentation) on how to get the zip to the user. For a nodejs example please see the tests.
+See [JSZip documentation](https://github.com/Stuk/jszip/blob/master/documentation/howto/write_zip.md) on how to get the zip to the user. For a nodejs example please see the tests.
 
 In environments where `SharedArrayBuffer` is not available, you might want to instead import from `epub-gen-memory/sabstub`, which includes a non-functional stub:
 
