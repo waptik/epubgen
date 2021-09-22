@@ -1,2 +1,6 @@
-// @ts-ignore
-window.SharedArrayBuffer = { prototype: { byteLength: undefined } };
+window.SharedArrayBuffer = {
+  // @ts-ignore
+  prototype: {
+    byteLength: 0
+  }
+};

@@ -10,6 +10,21 @@ export * from './other';
 export { Options, NormOptions };
 
 
+export const optionsDefaults = {
+  description: '',
+  author: ['anonymous'],
+  publisher: 'anonymous',
+  tocTitle: 'Table of Contents',
+  appendChapterTitles: true,
+  date: new Date().toISOString(),
+  lang: "en",
+  css,
+  fonts: [],
+  version: 3,
+  verbose: false,
+};
+
+
 export const normName = (name: string | string[]) => {
   try {
     ow(name, ow.string);
@@ -24,17 +39,7 @@ export const validateAndNormalizeOptions = (options: Options) => {
 
   // put defaults
   const opt = {
-    description: '',
-    author: ['anonymous'],
-    publisher: 'anonymous',
-    tocTitle: 'Table of Contents',
-    appendChapterTitles: true,
-    date: new Date().toISOString(),
-    lang: "en",
-    css,
-    fonts: [],
-    version: 3,
-    verbose: false,
+    ...optionsDefaults,
     ...options as Partial<Options>,
   };
   opt.author = normName(opt.author);

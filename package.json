@@ -5,9 +5,14 @@
   "main": "dist/lib/index.js",
   "unpkg": "dist/bundle.js",
   "main:umd": "dist/bundle.js",
+  "types": "dist/lib/index.d.ts",
   "browser": {
     "./dist/lib/util/fetchable.js": "./dist/lib/util/fetchable-browser.js"
   },
+  "files": [
+    "*.js",
+    "dist/"
+  ],
   "scripts": {
     "prebuild": "node scripts/templates.js",
     "build": "tsc && tsc-alias",
@@ -15,7 +20,7 @@
     "dev": "tsc -w & tsc-alias -w",
     "run-map": "node -r source-map-support/register --unhandled-rejections=strict",
     "test": "npm run run-map -- dist/tests/alice.js && npm run run-map -- dist/tests/alice2.js",
-    "clean": "rimraf dist lib/templates *.epub",
+    "clean": "rimraf dist lib/templates *.epub .tsbuildinfo",
     "prepack": "npm run clean && npm run build && npm run bundle"
   },
   "repository": {
