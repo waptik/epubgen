@@ -1,4 +1,5 @@
 import { remove as removeDiacritics } from 'diacritics';
+import { getType } from 'mime';
 import ow from 'ow';
 import css from 'templates/template.css.js';
 import uslug from 'uslug';
@@ -41,9 +42,10 @@ export const validateAndNormalizeOptions = (options: Options) => {
   const opt = {
     ...optionsDefaults,
     ...options as Partial<Options>,
-  };
+  } as NormOptions;
   opt.author = normName(opt.author);
-  return opt as NormOptions;
+  opt.fonts.forEach(font => font.mediaType = getType(font.url.replace(/\?.*/, ""))!)
+  return opt;
 };
 
 export const validateAndNormalizeChapter = (chapter: NormOptions['content'][number], index: number) => {

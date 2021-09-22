@@ -109,9 +109,9 @@ export class EPub {
     const fonts = oebps.folder('fonts')!;
     const fontContents = await Promise.all(
       this.options.fonts.map(font =>
-        fetchable(font).then(res => (this.log(`Downloaded font ${font}`), { font, data: res })))
+        fetchable(font.url).then(res => (this.log(`Downloaded font ${font.url}`), { ...font, data: res })))
     );
-    fontContents.forEach(font => fonts.file(font.font, font.data));
+    fontContents.forEach(font => fonts.file(font.filename, font.data));
   }
 
   private async downloadAllImages() {

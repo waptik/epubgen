@@ -36,7 +36,7 @@
         <% }) %>
 
         <% fonts.forEach(function(font, index) { %>
-        <item id="font_<%= index %>" href="fonts/<%= font %>" media-type="application/x-font-ttf" />
+        <item id="font_<%= index %>" href="fonts/<%= font.filename %>" media-type="<%= font.mediaType %>" />
         <% }) %>
     </manifest>
 
