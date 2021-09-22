@@ -1,0 +1,4 @@
+{
+  "main": "../dist/sabstub.js",
+  "types": "../dist/sabstub.d.ts"
+}

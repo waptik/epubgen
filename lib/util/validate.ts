@@ -1,4 +1,20 @@
 import ow, { ObjectPredicate, ReusableValidator } from 'ow';
+import { Merge, SetOptional } from 'type-fest';
+
+type NonNullableObject<T> = T extends Record<string, unknown>
+  ? Required<{ [key in keyof T]: NonNullableObject<T[key]> }>
+  : T extends Array<infer R>
+  ? Array<NonNullableObject<R>>
+  : NonNullable<T>;
+
+type MakeOptional<T extends Record<string, unknown>> = SetOptional<{
+  [key in keyof T]: T[key] }, NonNullable<{ [key in keyof T]: undefined extends T[key] ? key : never
+}[keyof T]>>;
+type MakeOptionalObject<T> = T extends Record<string, unknown>
+  ? MakeOptional<{ [key in keyof T]: MakeOptionalObject<T[key]> }>
+  : T extends Array<infer R>
+  ? Array<MakeOptionalObject<R>>
+  : T;
 
 const name = ow.optional.any(ow.string, ow.array.ofType(ow.string), ow.undefined);
 const filename = ow.optional.string.is(s => (s.indexOf('/') === -1 && s.indexOf('\\') === -1) || `Filename must not include slashes, got \`${s}\``);
@@ -38,17 +54,16 @@ export const validateOptions = ow.create('options', ow.object.exactShape({
 }));
 
 export type Options = (typeof validateOptions) extends ReusableValidator<infer R> ? MakeOptionalObject<R> : never;
-export type Chapter = (typeof chapter) extends ObjectPredicate<infer R> ? R : never;
-export type Font = (typeof font) extends ObjectPredicate<infer R> ? R : never;
+export type Chapter = (typeof chapter) extends ObjectPredicate<infer R> ? MakeOptionalObject<R> : never;
+export type Font = (typeof font) extends ObjectPredicate<infer R> ? MakeOptionalObject<R> : never;
 export type NormOptions = NonNullableObject<
-  Omit<Options, 'author'>
-  & {
+  Merge<Options, {
     author: string[],
     fonts: ({
       mediaType: string | null,
     } & Font)[],
-    content: ({
+    content: Merge<Chapter, {
       id: string,
       author: string[],
-    } & Omit<Chapter, 'author'>)[],
-  }>;
+    }>[],
+  }>>;

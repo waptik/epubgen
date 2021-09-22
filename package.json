@@ -4,22 +4,22 @@
   "description": "A library to generate EPUB from HTML",
   "main": "dist/lib/index.js",
   "unpkg": "dist/bundle.js",
-  "main:umd": "dist/bundle.js",
   "types": "dist/lib/index.d.ts",
   "browser": {
     "./dist/lib/util/fetchable.js": "./dist/lib/util/fetchable-browser.js"
   },
   "files": [
-    "*.js",
-    "dist/"
+    "dist/",
+    "bundle/",
+    "sabstub/"
   ],
   "scripts": {
     "prebuild": "node scripts/templates.js",
     "build": "tsc && tsc-alias",
     "bundle": "browserify --debug -e ./dist/lib/SharedArrayBufferStub.js -e ./dist/lib/index.js -s epub-gen -o dist/bundle.js && terser --mangle --compress --comments false -o dist/bundle.min.js -- dist/bundle.js",
     "dev": "tsc -w & tsc-alias -w",
-    "run-map": "node -r source-map-support/register --unhandled-rejections=strict",
-    "test": "npm run run-map -- dist/tests/alice.js && npm run run-map -- dist/tests/alice2.js",
+    "node": "node -r source-map-support/register --unhandled-rejections=strict",
+    "test": "npm run node -- dist/tests/alice.js && npm run node -- dist/tests/alice2.js",
     "clean": "rimraf dist lib/templates *.epub .tsbuildinfo",
     "prepack": "npm run clean && npm run build && npm run bundle"
   },
