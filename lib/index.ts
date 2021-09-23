@@ -91,7 +91,7 @@ export class EPub {
     const fonts = oebps.folder('fonts')!;
     const fontContents = await Promise.all(
       this.options.fonts.map(font =>
-        fetchable(font.url).then(res => (this.log(`Downloaded font ${font.url}`), { ...font, data: res })))
+        fetchable(font.url, this.options.fetchTimeout).then(res => (this.log(`Downloaded font ${font.url}`), { ...font, data: res })))
     );
     fontContents.forEach(font => fonts.file(font.filename, font.data));
   }
@@ -102,7 +102,7 @@ export class EPub {
     const images = oebps.folder('images')!;
     const imageContents = await Promise.all(
       this.images.map(image =>
-        fetchable(image.url).then(res => (this.log(`Downloaded image ${image.url}`), { ...image, data: res }))
+        fetchable(image.url, this.options.fetchTimeout).then(res => (this.log(`Downloaded image ${image.url}`), { ...image, data: res }))
       )
     );
     imageContents.forEach(image => images.file(`${image.id}.${image.extension}`, image.data));
@@ -111,7 +111,7 @@ export class EPub {
   protected async makeCover() {
     if (!this.cover) return this.log('No cover to download');
     const oebps = this.zip.folder('OEBPS')!;
-    const coverContent = await fetchable(this.options.cover);
+    const coverContent = await fetchable(this.options.cover, this.options.fetchTimeout);
     oebps.file(`cover.${this.cover.extension}`, coverContent);
   }
 

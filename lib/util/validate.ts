@@ -35,6 +35,7 @@ export type Options = {
   tocXHTML?: string,
   fonts?: Font[],
   version?: number,
+  fetchTimeout?: number,
   verbose?: boolean,
 };
 
@@ -75,6 +76,7 @@ export const optionsPredicate: ObjectPredicate<Options> = ow.object.exactShape({
   fonts: ow.optional.any(ow.array.ofType(fontPredicate), ow.undefined),
   version: ow.optional.number.is(x => x === 3 || x === 2 ||
     `Expected version to be 3 or 2, got \`${x}\``),
+  fetchTimeout: ow.optional.number.positive,
   verbose: ow.optional.boolean,
 });
 

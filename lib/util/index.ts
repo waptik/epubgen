@@ -35,6 +35,7 @@ export const optionsDefaults = (version = 3) => ({
   tocXHTML: version === 2 ? tocXHTML2 : tocXHTML3,
   fonts: [],
   version,
+  fetchTimeout: 20000,
   verbose: false,
 });
 

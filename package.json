@@ -19,8 +19,7 @@
     "build": "tsc && tsc-alias",
     "bundle": "browserify --debug -e ./dist/lib/SharedArrayBufferStub.js -e ./dist/lib/index.js -s epub-gen -o dist/bundle.js && terser --mangle --compress --comments false -o dist/bundle.min.js -- dist/bundle.js",
     "dev": "node scripts/templates.js -w & tsc -w & tsc-alias -w",
-    "node": "node -r source-map-support/register --unhandled-rejections=strict",
-    "test": "npm run node -- dist/tests/alice.js && npm run node -- dist/tests/alice2.js",
+    "test": "node -r source-map-support/register --trace-uncaught --unhandled-rejections=strict scripts/runner.js",
     "clean": "rimraf dist lib/templates *.epub .tsbuildinfo",
     "prepack": "npm run clean && npm run build && npm run bundle"
   },
@@ -42,6 +41,7 @@
   },
   "homepage": "https://github.com/cpiber/epub-gen",
   "dependencies": {
+    "abort-controller": "^3.0.0",
     "diacritics": "^1.3.0",
     "ejs": "^3.1.6",
     "jsdom": "^17.0.0",

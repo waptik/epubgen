@@ -6,9 +6,9 @@ See [JSZip Support table](https://stuk.github.io/jszip/) for which engines are s
 
 ------
 
-This EPUB library will generate the needed files, as well as download all referenced images.
+This EPUB library will generate the needed files, as well as download all referenced images. Note that all fonts and all images respectively are downloaded in parallel.
 
-In addition, browsers need to support `DOMParser` and `XMLSerializer` to replace `jsdom` and `xmlserializer` respectively.
+In addition, browsers need to support `DOMParser` to replace `jsdom`.
 
 Note that in the browser, only images on servers with CORS enabled can be downloaded.
 
@@ -17,7 +17,9 @@ Note that in the browser, only images on servers with CORS enabled can be downlo
 
 Install the lib and add it as a dependency (recommended), run in your project directory:
 
+```shell
 	npm install epub-gen-memory --save
+```
 
 Then put this in your code:
 
@@ -117,6 +119,8 @@ Returns: `Chapter`
     Array of fonts to include, see [below](#fonts)
 - `version`: `number` (optional, default `3`)
     Version of the generated EPUB, `3` for the latest version (http://idpf.org/epub/30) or `2` for the previous version (http://idpf.org/epub/201)
+- `fetchTimeout`: `number` (optional, default `20000`)
+    Timeout time for requests, in milliseconds
 - `verbose`: `boolean` (optional, default `false`)
     Whether to log progress messages
 
