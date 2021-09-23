@@ -10,7 +10,7 @@
     <% content.forEach(function(content, index){ %>
         <% if(!content.excludeFromToc){ %>
             <p class="table-of-content">
-                <a href="<%= content.filename %>"><%= (1+index) + ". " + content.title %>
+                <a href="<%= content.filename %>"><%= (numberChaptersInTOC ? (1+index) + ". " : "") + content.title %>
                     <% if(content.author.length){ %>
                     - <small class="toc-author"><%= content.author.join(",") %></small>
                     <% } %>

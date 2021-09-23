@@ -110,6 +110,10 @@ protected:
     Book cover image URL, e.g. `"http://abc.com/book-cover.jpg"`
 - `tocTitle`: `string` (optional, default `Table of Contents`)
     Title of the Table of Contents
+- `tocInTOC`: `boolean` (optional, default `true`)
+    Whether to show the TOC entry in the reader's Table of Contents; only for EPUB2
+- `numberChaptersInTOC`: `boolean` (optional, default `true`)
+    Automatically number entries in TOC
 - `prependChapterTitles`: `boolean` (optional, default `true`)
     Automatically put the title of the chapter before the content
 - `date`: `string` (optional, default today)

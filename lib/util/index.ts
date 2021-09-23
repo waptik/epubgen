@@ -26,6 +26,7 @@ export const optionsDefaults = (version = 3) => ({
   publisher: 'anonymous',
   tocTitle: 'Table of Contents',
   tocInTOC: true,
+  numberChaptersInTOC: true,
   prependChapterTitles: true,
   date: new Date().toISOString(),
   lang: "en",

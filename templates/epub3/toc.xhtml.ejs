@@ -9,7 +9,11 @@
 <body>
     <h1 class="h1"><%= tocTitle %></h1>
     <nav id="toc" epub:type="toc">
-        <ol>
+        <% if (numberChaptersInTOC){ %>
+            <ol>
+        <% }else{ %>
+            <ol style="list-style: none">
+        <% } %>
             <% content.forEach(function(content, index){ %>
                 <% if(!content.excludeFromToc){ %>
                     <li class="table-of-content">

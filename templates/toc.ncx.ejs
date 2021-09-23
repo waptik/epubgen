@@ -19,7 +19,7 @@
             <% if(!content.excludeFromToc && content.beforeToc){ %>
                 <navPoint id="content_<%= index %>_<%= content.id %>" playOrder="<%= _index++ %>" class="chapter">
                     <navLabel>
-                        <text><%= (1+index) + ". " + content.title %></text>
+                        <text><%= (numberChaptersInTOC ? (1+index) + ". " : "") + content.title %></text>
                     </navLabel>
                     <content src="<%= content.filename %>"/>
                 </navPoint>
@@ -39,7 +39,7 @@
             <% if(!content.excludeFromToc && !content.beforeToc){ %>
                 <navPoint id="content_<%= index %>_<%= content.id %>" playOrder="<%= _index++ %>" class="chapter">
                     <navLabel>
-                        <text><%= (1+index) + ". " + content.title %></text>
+                        <text><%= (numberChaptersInTOC ? (1+index) + ". " : "") + content.title %></text>
                     </navLabel>
                     <content src="<%= content.filename %>"/>
                 </navPoint>
