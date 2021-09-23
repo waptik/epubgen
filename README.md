@@ -12,6 +12,8 @@ In addition, browsers need to support `DOMParser` to replace `jsdom`.
 
 Note that in the browser, only images on servers with CORS enabled can be downloaded.
 
+On the server (with Node.js), image paths can also start with `file://`, in which case they are read directly from disc. The part after `file://` must be a valid path for your system, as read by [`fs.readFile`](https://nodejs.org/api/fs.html#fs_file_url_paths).
+
 
 ## Usage
 
