@@ -72,13 +72,14 @@ import type { Options, Content, Chapter, Font } from 'epub-gen-memory';
 ### `class EPub`
 
 - `contructor(options: Options, content: Chapter[])`
-- `render(): Promise<Buffer>` (Browser `Promise<Blob>`)
+- `render(): Promise<EPub>`
+- `genEpub(): Promise<Buffer>` (Browser `Promise<Blob>`)
+- `generateAsync(options: JSZipGeneratorOptions): Promise<...>` see [JSZip.generateAsync](https://stuk.github.io/jszip/documentation/api_jszip/generate_async.html)
 protected:
 - `generateTemplateFiles(): Promise<void>`
 - `downloadAllFonts(): Promise<void>`
 - `downloadAllImages(): Promise<void>`
 - `makeCover(): Promise<void>`
-- `genEpub(): Promise<Buffer>` (Browser `Promise<Blob>`)
 
 
 ### `optionsDefaults([version])`

@@ -1,6 +1,6 @@
 import { remove as removeDiacritics } from 'diacritics';
 import { render as renderTemplate } from 'ejs';
-import jszip from 'jszip';
+import jszip, { JSZipGeneratorOptions } from 'jszip';
 import { getExtension, getType } from 'mime';
 import { Chapter, chapterDefaults, Content, Font, Image, NormChapter, NormOptions, Options, optionsDefaults, retryFetch, type, uuid, validateAndNormalizeChapters, validateAndNormalizeOptions } from './util';
 
@@ -45,9 +45,25 @@ export class EPub {
     this.log('Making cover...');
     await this.makeCover();
     this.log('Finishing up...');
-    const content = await this.genEpub();
-    this.log('Done.');
+    return this;
+  }
+
+  async genEpub() {
+    await this.render();
+    const content = this.zip.generateAsync({
+      type,
+      mimeType: 'application/epub+zip',
+      compression: 'DEFLATE',
+      compressionOptions: {
+        level: 9,
+      },
+    });
+    this.log('Done');
     return content;
+  }
+
+  generateAsync(options: JSZipGeneratorOptions) {
+    return this.zip.generateAsync(options);
   }
 
   protected async generateTemplateFiles() {
@@ -115,18 +131,7 @@ export class EPub {
     const coverContent = await retryFetch(this.options.cover, this.options.fetchTimeout, this.options.retryTimes, this.log);
     oebps.file(`cover.${this.cover.extension}`, coverContent);
   }
-
-  protected async genEpub() {
-    return await this.zip.generateAsync({
-      type,
-      mimeType: 'application/epub+zip',
-      compression: 'DEFLATE',
-      compressionOptions: {
-        level: 9,
-      },
-    });
-  }
 }
 
-const epub = (options: Options, content: Content) => new EPub(options, content).render();
+const epub = (options: Options, content: Content) => new EPub(options, content).genEpub();
 export default epub;
