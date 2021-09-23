@@ -101,9 +101,7 @@
   },
   "include": [
     "lib/",
-    "tests/"
-  ],
-  "files": [
+    "tests/",
     "./sabstub.ts"
   ]
 }

@@ -24,7 +24,7 @@ export class EPub {
     this.content = validateAndNormalizeChapters.call(this, content);
     this.uuid = uuid();
 
-    this.log = this.options.verbose ? console.log : () => {};
+    this.log = this.options.verbose ? console.log.bind(console) : () => {};
     this.zip = new jszip();
     this.zip.file('mimetype', 'application/epub+zip', { compression: 'STORE' });
 
@@ -127,5 +127,5 @@ export class EPub {
   }
 }
 
-const epub = (options: Options, content: Chapter[]) => new EPub(options, content).render();
+const epub = (options: Options, content: Content) => new EPub(options, content).render();
 export default epub;

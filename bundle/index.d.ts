@@ -1,4 +1,4 @@
-/// <reference types="node" />
+/// <reference types="DOM" />
 import { Content, Options } from '../dist/lib';
 export * from '../dist/lib';
 

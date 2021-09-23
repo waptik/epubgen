@@ -10,6 +10,7 @@ specifiers:
   '@types/xmlserializer': ^0.6.2
   browserify: ^17.0.0
   chalk: ^4.1.2
+  chokidar: ^3.5.2
   diacritics: ^1.3.0
   dree: ^2.8.3
   ejs: ^3.1.6
@@ -48,6 +49,7 @@ devDependencies:
   '@types/xmlserializer': 0.6.2
   browserify: 17.0.0
   chalk: 4.1.2
+  chokidar: 3.5.2
   dree: 2.8.3
   rimraf: 3.0.2
   source-map-support: 0.5.20
