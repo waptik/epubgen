@@ -39,7 +39,7 @@ export const optionsDefaults = (version = 3) => ({
 });
 
 export const chapterDefaults = (index: number) => ({
-  title: `Chapter ${index}`,
+  title: `Chapter ${index+1}`,
   id: `item_${index}`,
   url: '',
   excludeFromToc: false,
@@ -73,9 +73,10 @@ export const validateAndNormalizeOptions = (options: Options) => {
 export function validateAndNormalizeChapters(this: EPub, chapters: Chapter[]) {
   ow(chapters, 'content', ow.array.ofType(chapterPredicate));
 
-  chapters.forEach((chapter, index) => {
-    validateAndNormalizeChapter(chapter, index);
-    chapter.content = normalizeHTML.call(this, index, chapter.content)
+  chapters = chapters.map((chapter, index) => {
+    const ch = validateAndNormalizeChapter(chapter, index);
+    ch.content = normalizeHTML.call(this, index, chapter.content)
+    return ch;
   });
   return chapters as NormChapter[];
 }
@@ -93,5 +94,6 @@ export const validateAndNormalizeChapter = (chapter: Chapter, index: number) => 
     ch.filename = `${ch.filename}.xhtml`;
   }
   ch.author = normName(ch.author);
+  return ch;
 };
 

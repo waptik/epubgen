@@ -2,7 +2,7 @@ import { getExtension, getType } from 'mime';
 import { serializeToString } from 'xmlserializer';
 import type { EPub } from '..';
 import { allowedAttributes, allowedXhtml11Tags } from './constants';
-import { parse } from './html-parse-browser';
+import { parse } from './html-parse';
 import { uuid } from './other';
 
 export type Image = {

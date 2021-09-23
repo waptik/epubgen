@@ -125,7 +125,7 @@ Returns: `Chapter`
 
 **Within each chapter object:**
 
-- `title`: `string` (optional, default `no title`)
+- `title`: `string` (optional, default `Chapter [number]`)
     Chapter title
 - `author`: `string | string[]` (optional)
     Chapter author, generates info below chapter title
