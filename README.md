@@ -55,7 +55,7 @@ const epub = require('epub-gen-memory').default;
 
 ## API
 
-```js
+```ts
 import epub, { EPub, optionsDefaults, chapterDefaults } from 'epub-gen-memory';
 import type { Options, Content, Chapter, Font } from 'epub-gen-memory';
 ```
@@ -98,39 +98,39 @@ protected:
 
 ### Options
 
-- `title`: `string`
+- `title`: `string`<br />
     Title of the book
-- `author`: `string | string[]` (optional, default `['anonymous']`)
+- `author`: `string | string[]` (optional, default `['anonymous']`)<br />
     Name of the author for the book, e.g. `"Alice"` or `["Alice", "Bob"]`
-- `publisher`: `string` (optional, default `anonymous`)
+- `publisher`: `string` (optional, default `anonymous`)<br />
     Publisher name
-- `description`: `string` (optional)
+- `description`: `string` (optional)<br />
     Book description
-- `cover`: `string` (optional)
+- `cover`: `string` (optional)<br />
     Book cover image URL, e.g. `"http://abc.com/book-cover.jpg"`
-- `tocTitle`: `string` (optional, default `Table of Contents`)
+- `tocTitle`: `string` (optional, default `Table of Contents`)<br />
     Title of the Table of Contents
-- `tocInTOC`: `boolean` (optional, default `true`)
+- `tocInTOC`: `boolean` (optional, default `true`)<br />
     Whether to show the TOC entry in the reader's Table of Contents; only for EPUB2
-- `numberChaptersInTOC`: `boolean` (optional, default `true`)
+- `numberChaptersInTOC`: `boolean` (optional, default `true`)<br />
     Automatically number entries in TOC
-- `prependChapterTitles`: `boolean` (optional, default `true`)
+- `prependChapterTitles`: `boolean` (optional, default `true`)<br />
     Automatically put the title of the chapter before the content
-- `date`: `string` (optional, default today)
+- `date`: `string` (optional, default today)<br />
     Publication date
-- `lang`: `string` (optional, default `en`)
+- `lang`: `string` (optional, default `en`)<br />
     Language code of the book
-- `css`: `string` (optional)
+- `css`: `string` (optional)<br />
     CSS string, replaces our default styles, e.g: `"body{background: #000}"`
-- `fonts`: `Font[]` (optional)
+- `fonts`: `Font[]` (optional)<br />
     Array of fonts to include, see [below](#fonts)
-- `version`: `number` (optional, default `3`)
+- `version`: `number` (optional, default `3`)<br />
     Version of the generated EPUB, `3` for the latest version (http://idpf.org/epub/30) or `2` for the previous version (http://idpf.org/epub/201)
-- `fetchTimeout`: `number` (optional, default `20000`)
+- `fetchTimeout`: `number` (optional, default `20000`)<br />
     Timeout time for requests, in milliseconds; Browsers need to support `AbortController` and signals for this to work
-- `retryTimes`: `number` (optional, default `3`)
+- `retryTimes`: `number` (optional, default `3`)<br />
     How many times to retry fetching resources
-- `verbose`: `boolean` (optional, default `false`)
+- `verbose`: `boolean` (optional, default `false`)<br />
     Whether to log progress messages
 
 
@@ -138,19 +138,19 @@ protected:
 
 **Within each chapter object:**
 
-- `title`: `string` (optional, default `Chapter [number]`)
+- `title`: `string` (optional, default `Chapter [number]`)<br />
     Chapter title
-- `author`: `string | string[]` (optional)
+- `author`: `string | string[]` (optional)<br />
     Chapter author, generates info below chapter title
-- `content`: `string`
+- `content`: `string`<br />
     HTML String of the chapter content, image sources are downloaded
-- `excludeFromToc`: `boolean` (optional, default `false`)
+- `excludeFromToc`: `boolean` (optional, default `false`)<br />
     Don't list chapter in Table of Contents
-- `beforeToc`: `boolean` (optional, default `false`)
+- `beforeToc`: `boolean` (optional, default `false`)<br />
     List chapter before Table of Contents heading
-- `filename`: `string` (optional)
+- `filename`: `string` (optional)<br />
     Custom name for chapter file
-- `url`: `string` (optional)
+- `url`: `string` (optional)<br />
     External link below chapter title
 
 
@@ -158,9 +158,9 @@ protected:
 
 **Within each font object:**
 
-- `filename`: `string`
+- `filename`: `string`<br />
     Name under which the font should be downloaded, including file extension
-- `url`: `string`
+- `url`: `string`<br />
     URL where to find font, for best compatibility use `ttf` (TrueType) fonts
 
 
