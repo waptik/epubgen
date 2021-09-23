@@ -36,6 +36,7 @@ export type Options = {
   fonts?: Font[],
   version?: number,
   fetchTimeout?: number,
+  retryTimes?: number,
   verbose?: boolean,
 };
 
@@ -77,6 +78,7 @@ export const optionsPredicate: ObjectPredicate<Options> = ow.object.exactShape({
   version: ow.optional.number.is(x => x === 3 || x === 2 ||
     `Expected version to be 3 or 2, got \`${x}\``),
   fetchTimeout: ow.optional.number.positive,
+  retryTimes: ow.optional.number.positive,
   verbose: ow.optional.boolean,
 });
 

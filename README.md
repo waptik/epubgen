@@ -1,14 +1,12 @@
-# epub-gen-memory - a library to make EPUBs from HTML
+# epub-gen-memory -- a library to make EPUBs from HTML
 
 Generate EPUB books from HTML with a simple API in Node.js or the browser.
 
-See [JSZip Support table](https://stuk.github.io/jszip/) for which engines are supported.
+See [JSZip Support table](https://stuk.github.io/jszip/) for which engines are supported. In addition, browsers need to support `fetch` as well as `DOMParser` to replace `node-fetch` and `jsdom`.
 
 ------
 
 This EPUB library will generate the needed files, as well as download all referenced images. Note that all fonts and all images respectively are downloaded in parallel, so please keep that in mind when adjusting `fetchTimeout`.
-
-In addition, browsers need to support `DOMParser` to replace `jsdom`.
 
 Note that in the browser, only images on servers with CORS enabled can be downloaded.
 
@@ -48,7 +46,7 @@ The package also includes a [browserify](https://www.npmjs.com/package/browserif
 import epub from 'epub-gen-memory/bundle';
 ```
 
-**Note**: This library was written in TypeScript and thus uses ESM exports, but it was compiled to CommonJS, so you can also use
+**Note**: This library was written in TypeScript and thus uses ESM exports, but it was compiled to CommonJS, so you can also use the following:
 
 ```js
 const epub = require('epub-gen-memory').default;
@@ -71,7 +69,7 @@ import type { Options, Content, Chapter, Font } from 'epub-gen-memory';
 - **Browser** Returns: `Promise<Blob>`
 
 
-### `class Epub`
+### `class EPub`
 
 - `contructor(options: Options, content: Chapter[])`
 - `render(): Promise<Buffer>` (Browser `Promise<Blob>`)
@@ -123,6 +121,8 @@ protected:
     Version of the generated EPUB, `3` for the latest version (http://idpf.org/epub/30) or `2` for the previous version (http://idpf.org/epub/201)
 - `fetchTimeout`: `number` (optional, default `20000`)
     Timeout time for requests, in milliseconds; Browsers need to support `AbortController` and signals for this to work
+- `retryTimes`: `number` (optional, default `3`)
+    How many times to retry fetching resources
 - `verbose`: `boolean` (optional, default `false`)
     Whether to log progress messages
 

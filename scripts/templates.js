@@ -8,6 +8,13 @@ const rimraf = require('rimraf');
 const templates = path.resolve(__dirname, '../templates');
 const output = path.resolve(__dirname, '../lib/templates');
 
+console.log(chalk.yellow`{bold Cleaning template directory} ${output}`);
+rimraf.sync(output);
+
+console.log(chalk.blue`{bold Compiling templates in} ${templates} {bold to} ${output}`);
+
+
+
 const compile = async (relativePath, fullPath) => {
   console.log('Compiling', relativePath);
   const out = path.resolve(output, `${relativePath}.ts`);
@@ -15,11 +22,6 @@ const compile = async (relativePath, fullPath) => {
   const content = await fs.readFile(fullPath);
   await fs.writeFile(out, `export default ${JSON.stringify(content.toString())} as string;`);
 };
-
-console.log(chalk.yellow`{bold Cleaning template directory} ${output}`);
-rimraf.sync(output);
-
-console.log(chalk.blue`{bold Compiling templates in} ${templates} {bold to} ${output}`);
 
 if (process.argv.indexOf('-w') !== -1 || process.argv.indexOf('--watch') !== -1) {
   const watcher = chokidar.watch(templates);

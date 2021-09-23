@@ -36,6 +36,7 @@ export const optionsDefaults = (version = 3) => ({
   fonts: [],
   version,
   fetchTimeout: 20000,
+  retryTimes: 3,
   verbose: false,
 });
 

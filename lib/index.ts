@@ -2,8 +2,7 @@ import { remove as removeDiacritics } from 'diacritics';
 import { render as renderTemplate } from 'ejs';
 import jszip from 'jszip';
 import { getExtension, getType } from 'mime';
-import { Chapter, chapterDefaults, Content, Font, Image, NormChapter, NormOptions, Options, optionsDefaults, uuid, validateAndNormalizeChapters, validateAndNormalizeOptions } from './util';
-import fetchable, { type } from './util/fetchable';
+import { Chapter, chapterDefaults, Content, Font, Image, NormChapter, NormOptions, Options, optionsDefaults, retryFetch, type, uuid, validateAndNormalizeChapters, validateAndNormalizeOptions } from './util';
 
 
 export { Options, Content, Chapter, Font, optionsDefaults, chapterDefaults };
@@ -91,7 +90,8 @@ export class EPub {
     const fonts = oebps.folder('fonts')!;
     const fontContents = await Promise.all(
       this.options.fonts.map(font =>
-        fetchable(font.url, this.options.fetchTimeout).then(res => (this.log(`Downloaded font ${font.url}`), { ...font, data: res })))
+        retryFetch(font.url, this.options.fetchTimeout, this.options.retryTimes, this.log)
+          .then(res => (this.log(`Downloaded font ${font.url}`), { ...font, data: res })))
     );
     fontContents.forEach(font => fonts.file(font.filename, font.data));
   }
@@ -102,7 +102,8 @@ export class EPub {
     const images = oebps.folder('images')!;
     const imageContents = await Promise.all(
       this.images.map(image =>
-        fetchable(image.url, this.options.fetchTimeout).then(res => (this.log(`Downloaded image ${image.url}`), { ...image, data: res }))
+        retryFetch(image.url, this.options.fetchTimeout, this.options.retryTimes, this.log)
+          .then(res => (this.log(`Downloaded image ${image.url}`), { ...image, data: res }))
       )
     );
     imageContents.forEach(image => images.file(`${image.id}.${image.extension}`, image.data));
@@ -111,7 +112,7 @@ export class EPub {
   protected async makeCover() {
     if (!this.cover) return this.log('No cover to download');
     const oebps = this.zip.folder('OEBPS')!;
-    const coverContent = await fetchable(this.options.cover, this.options.fetchTimeout);
+    const coverContent = await retryFetch(this.options.cover, this.options.fetchTimeout, this.options.retryTimes, this.log);
     oebps.file(`cover.${this.cover.extension}`, coverContent);
   }
 

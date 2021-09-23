@@ -6,8 +6,10 @@ const chalk = require('chalk');
 const tests = path.resolve(__dirname, '../dist/tests');
 console.log(chalk.blue`{bold Running all tests in} ${tests}\n`);
 
+
+
 fs.readdirSync(tests).filter(file => file.endsWith('.js')).forEach(file => {
-  console.log(chalk`{bold Executing test} ${file}`);
+  console.log(chalk`\n{bold Executing test} ${file}`);
   const ret = spawnSync('node', ['-r', 'source-map-support/register', '--unhandled-rejections=strict', path.resolve(tests, file)], {
     stdio: 'inherit',
   });
