@@ -11,6 +11,8 @@ export type Chapter = {
   url?: string,
 };
 
+export type Content = Chapter[];
+
 export type Font = {
   filename: string,
   url: string,

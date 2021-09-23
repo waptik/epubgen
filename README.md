@@ -8,6 +8,8 @@ See [JSZip Support table](https://stuk.github.io/jszip/) for which engines are s
 
 This EPUB library will generate the needed files, as well as download all referenced images.
 
+In addition, browsers need to support `DOMParser` and `XMLSerializer` to replace `jsdom` and `xmlserializer` respectively.
+
 Note that in the browser, only images on servers with CORS enabled can be downloaded.
 
 
@@ -51,12 +53,42 @@ The package also includes a [browserify](https://www.npmjs.com/package/browserif
 
 ## API
 
+```js
+    import epub, { EPub, optionsDefaults, chapterDefaults } from 'epub-gen-memory';
+    import type { Options, Content, Chapter, Font } from 'epub-gen-memory';
+```
+
+
 ### `epub(options, content)`
 
-- `options`: `Options`
+- `options`: `Options` (see [below](#options))
 - `content`: `Chapter[]` (see [below](#chapters))
 - Returns: `Promise<Buffer>`
 - **Browser** Returns: `Promise<Blob>`
+
+
+### `class Epub`
+
+- `contructor(options: Options, content: Chapter[])`
+- `render(): Promise<Buffer>` (Browser `Promise<Blob>`)
+protected:
+- `generateTemplateFiles(): Promise<void>`
+- `downloadAllFonts(): Promise<void>`
+- `downloadAllImages(): Promise<void>`
+- `makeCover(): Promise<void>`
+- `genEpub(): Promise<Buffer>` (Browser `Promise<Blob>`)
+
+
+### `optionsDefaults([version])`
+
+- `version`: `number` (default `3`) Defaults used for `Options`
+- Returns: `Options`
+
+
+### `chapterDefaults(index)`
+
+- `index`: `number` of the chapter
+Returns: `Chapter`
 
 
 ### Options
@@ -131,16 +163,13 @@ You can then use the fonts as such (assuming you have a font with filename `Merr
 ```
 
 
-## Demo Code:
-
-Please see the tests.
-
-
 ## Demo Preview:
 
 ![Demo Preview](demo_preview.png?raw=true)
 
 _From Lewis Carroll "Alice's Adventures in Wonderland", based on text at https://www.cs.cmu.edu/~rgs/alice-table.html and images from http://www.alice-in-wonderland.net/resources/pictures/alices-adventures-in-wonderland._
+
+Please see the tests for the code used.
 
 
 ## Credits

@@ -12,12 +12,12 @@ import tocNCX from 'templates/toc.ncx.ejs.js';
 import uslug from 'uslug';
 import type { EPub } from '..';
 import { normalizeHTML } from './html';
-import { Chapter, chapterPredicate, NormChapter, NormOptions, Options, optionsPredicate } from './validate';
+import { Chapter, chapterPredicate, Content, Font, NormChapter, NormOptions, Options, optionsPredicate } from './validate';
 
 export * from './constants';
 export * from './html';
 export * from './other';
-export { Options, NormOptions };
+export { Options, NormOptions, Content, Chapter, NormChapter, Font };
 
 
 export const optionsDefaults = (version = 3) => ({
@@ -36,6 +36,14 @@ export const optionsDefaults = (version = 3) => ({
   fonts: [],
   version,
   verbose: false,
+});
+
+export const chapterDefaults = (index: number) => ({
+  title: `Chapter ${index}`,
+  id: `item_${index}`,
+  url: '',
+  excludeFromToc: false,
+  beforeToc: false,
 });
 
 
@@ -73,17 +81,17 @@ export function validateAndNormalizeChapters(this: EPub, chapters: Chapter[]) {
 }
 
 export const validateAndNormalizeChapter = (chapter: Chapter, index: number) => {
-  chapter.title ||= 'no title';
-  chapter.url ||= '';
-  const slug = uslug(removeDiacritics(chapter.title))
-  if (!chapter.filename) {
-    chapter.filename = `${index}_${slug}.xhtml`;
-  } else if (!chapter.filename.endsWith('.xhtml')) {
-    chapter.filename = `${chapter.filename}.xhtml`;
+  const ch = {
+    ...chapterDefaults(index),
+    ...chapter,
+  } as NormChapter;
+
+  const slug = uslug(removeDiacritics(ch.title))
+  if (!ch.filename) {
+    ch.filename = `${index}_${slug}.xhtml`;
+  } else if (!ch.filename.endsWith('.xhtml')) {
+    ch.filename = `${ch.filename}.xhtml`;
   }
-  (chapter as NormChapter).id = `item_${index}`;
-  chapter.excludeFromToc ||= false
-  chapter.beforeToc ||= false
-  chapter.author = normName(chapter.author);
+  ch.author = normName(ch.author);
 };
 

@@ -1,8 +1,8 @@
-import { JSDOM } from 'jsdom';
 import { getExtension, getType } from 'mime';
 import { serializeToString } from 'xmlserializer';
 import type { EPub } from '..';
 import { allowedAttributes, allowedXhtml11Tags } from './constants';
+import { parse } from './html-parse-browser';
 import { uuid } from './other';
 
 export type Image = {
@@ -13,7 +13,7 @@ export type Image = {
 };
 
 export function normalizeHTML(this: EPub, index: number, data: string) {
-  const { window: { document }} = new JSDOM(data);
+  const document = parse(data);
 
   // reverse to make sure we transform innermost first
   Array.from(document.body.querySelectorAll('*')).reverse().forEach(element => {

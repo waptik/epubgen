@@ -2,13 +2,11 @@ import { remove as removeDiacritics } from 'diacritics';
 import { render as renderTemplate } from 'ejs';
 import jszip from 'jszip';
 import { getExtension, getType } from 'mime';
-import { Image, NormOptions, Options, uuid, validateAndNormalizeChapters, validateAndNormalizeOptions } from './util';
+import { Chapter, chapterDefaults, Content, Font, Image, NormChapter, NormOptions, Options, optionsDefaults, uuid, validateAndNormalizeChapters, validateAndNormalizeOptions } from './util';
 import fetchable, { type } from './util/fetchable';
-import { Chapter, NormChapter } from './util/validate';
 
 
-type Content = Chapter[];
-export { Options, Content, Chapter };
+export { Options, Content, Chapter, Font, optionsDefaults, chapterDefaults };
 
 export class EPub {
   protected options: NormOptions;
@@ -20,7 +18,7 @@ export class EPub {
   protected log: typeof console.log;
   protected zip: InstanceType<jszip>;
 
-  constructor(options: Options, content: Chapter[]) {
+  constructor(options: Options, content: Content) {
     this.options = validateAndNormalizeOptions(options);
     this.options.lang = removeDiacritics(this.options.lang);
     this.content = validateAndNormalizeChapters.call(this, content);
@@ -53,7 +51,7 @@ export class EPub {
     return content;
   }
 
-  private async generateTemplateFiles() {
+  protected async generateTemplateFiles() {
     const oebps = this.zip.folder('OEBPS')!;
     oebps.file('style.css', this.options.css);
     
@@ -87,7 +85,7 @@ export class EPub {
     oebps.file('toc.xhtml', renderTemplate(this.options.tocXHTML, opt));
   }
 
-  private async downloadAllFonts() {
+  protected async downloadAllFonts() {
     if (!this.options.fonts.length) return this.log('No fonts to download');
     const oebps = this.zip.folder('OEBPS')!;
     const fonts = oebps.folder('fonts')!;
@@ -98,7 +96,7 @@ export class EPub {
     fontContents.forEach(font => fonts.file(font.filename, font.data));
   }
 
-  private async downloadAllImages() {
+  protected async downloadAllImages() {
     if (!this.images.length) return this.log('No images to download');
     const oebps = this.zip.folder('OEBPS')!;
     const images = oebps.folder('images')!;
@@ -110,14 +108,14 @@ export class EPub {
     imageContents.forEach(image => images.file(`${image.id}.${image.extension}`, image.data));
   }
 
-  private async makeCover() {
+  protected async makeCover() {
     if (!this.cover) return this.log('No cover to download');
     const oebps = this.zip.folder('OEBPS')!;
     const coverContent = await fetchable(this.options.cover);
     oebps.file(`cover.${this.cover.extension}`, coverContent);
   }
 
-  private async genEpub() {
+  protected async genEpub() {
     return await this.zip.generateAsync({
       type,
       mimeType: 'application/epub+zip',

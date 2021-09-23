@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "A library to generate EPUB from HTML",
   "main": "dist/lib/index.js",
-  "unpkg": "dist/bundle.js",
+  "unpkg": "dist/bundle.min.js",
   "types": "dist/lib/index.d.ts",
   "browser": {
-    "./dist/lib/util/fetchable.js": "./dist/lib/util/fetchable-browser.js"
+    "./dist/lib/util/fetchable.js": "./dist/lib/util/fetchable-browser.js",
+    "./dist/lib/util/html-parse.js": "./dist/lib/util/html-parse-browser.js"
   },
   "files": [
     "dist/",
