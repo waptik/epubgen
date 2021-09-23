@@ -33,6 +33,8 @@ export function normalizeHTML(this: EPub, index: number, data: string) {
     element.alt ||= "image-placeholder";
     
     const url = element.src;
+    if (!url)
+      return element.remove();
     let image = this.images.find(i => i.url === url);
     if (!image) {
       const mediaType = getType(url.replace(/\?.*/, ""));
