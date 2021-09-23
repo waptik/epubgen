@@ -13,7 +13,7 @@ const compile = async (relativePath, fullPath) => {
   const out = path.resolve(output, `${relativePath}.ts`);
   await fs.mkdir(path.dirname(out), { recursive: true });
   const content = await fs.readFile(fullPath);
-  await fs.writeFile(out, `export default ${JSON.stringify(content.toString())};`);
+  await fs.writeFile(out, `export default ${JSON.stringify(content.toString())} as string;`);
 };
 
 console.log(chalk.yellow`{bold Cleaning template directory} ${output}`);
