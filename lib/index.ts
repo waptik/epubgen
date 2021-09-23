@@ -4,7 +4,7 @@ import jszip from 'jszip';
 import { getExtension, getType } from 'mime';
 import { Image, NormOptions, Options, uuid, validateAndNormalizeChapters, validateAndNormalizeOptions } from './util';
 import fetchable, { type } from './util/fetchable';
-import { Chapter, NormChapters } from './util/validate';
+import { Chapter, NormChapter } from './util/validate';
 
 
 type Content = Chapter[];
@@ -12,7 +12,7 @@ export { Options, Content, Chapter };
 
 export class EPub {
   protected options: NormOptions;
-  protected content: NormChapters;
+  protected content: NormChapter[];
   protected uuid: string;
   protected images: Image[] = [];
   protected cover?: { extension: string, mediaType: string };

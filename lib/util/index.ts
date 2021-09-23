@@ -12,7 +12,7 @@ import tocNCX from 'templates/toc.ncx.ejs.js';
 import uslug from 'uslug';
 import type { EPub } from '..';
 import { normalizeHTML } from './html';
-import { Chapter, NormChapters, NormOptions, Options, validateChapters, validateOptions } from './validate';
+import { Chapter, chapterPredicate, NormChapter, NormOptions, Options, optionsPredicate } from './validate';
 
 export * from './constants';
 export * from './html';
@@ -39,7 +39,7 @@ export const optionsDefaults = (version = 3) => ({
 });
 
 
-export const normName = (name: string | string[]) => {
+export const normName = (name: string | string[] | undefined) => {
   try {
     ow(name, ow.string);
     return [name];
@@ -49,12 +49,12 @@ export const normName = (name: string | string[]) => {
 };
 
 export const validateAndNormalizeOptions = (options: Options) => {
-  validateOptions(options as NormOptions);
+  ow(options, 'options', optionsPredicate);
 
   // put defaults
   const opt = {
     ...optionsDefaults(options.version || 3),
-    ...options as Partial<Options>,
+    ...options,
   } as NormOptions;
   opt.author = normName(opt.author);
   opt.fonts.forEach(font => font.mediaType = getType(font.url.replace(/\?.*/, ""))!);
@@ -63,16 +63,16 @@ export const validateAndNormalizeOptions = (options: Options) => {
 };
 
 export function validateAndNormalizeChapters(this: EPub, chapters: Chapter[]) {
-  validateChapters(chapters as NormChapters);
+  ow(chapters, 'content', ow.array.ofType(chapterPredicate));
 
   chapters.forEach((chapter, index) => {
-    validateAndNormalizeChapter(chapter as NormChapters[number], index);
+    validateAndNormalizeChapter(chapter, index);
     chapter.content = normalizeHTML.call(this, index, chapter.content)
   });
-  return chapters as NormChapters;
+  return chapters as NormChapter[];
 }
 
-export const validateAndNormalizeChapter = (chapter: NormChapters[number], index: number) => {
+export const validateAndNormalizeChapter = (chapter: Chapter, index: number) => {
   chapter.title ||= 'no title';
   chapter.url ||= '';
   const slug = uslug(removeDiacritics(chapter.title))
@@ -81,7 +81,7 @@ export const validateAndNormalizeChapter = (chapter: NormChapters[number], index
   } else if (!chapter.filename.endsWith('.xhtml')) {
     chapter.filename = `${chapter.filename}.xhtml`;
   }
-  chapter.id = `item_${index}`;
+  (chapter as NormChapter).id = `item_${index}`;
   chapter.excludeFromToc ||= false
   chapter.beforeToc ||= false
   chapter.author = normName(chapter.author);
