@@ -6,7 +6,7 @@ See [JSZip Support table](https://stuk.github.io/jszip/) for which engines are s
 
 ------
 
-This EPUB library will generate the needed files, as well as download all referenced images. Note that all fonts and all images respectively are downloaded in parallel.
+This EPUB library will generate the needed files, as well as download all referenced images. Note that all fonts and all images respectively are downloaded in parallel, so please keep that in mind when adjusting `fetchTimeout`.
 
 In addition, browsers need to support `DOMParser` to replace `jsdom`.
 
@@ -18,18 +18,18 @@ Note that in the browser, only images on servers with CORS enabled can be downlo
 Install the lib and add it as a dependency (recommended), run in your project directory:
 
 ```shell
-	npm install epub-gen-memory --save
+npm install epub-gen-memory --save
 ```
 
 Then put this in your code:
 
 ```js
-    import epub from 'epub-gen-memory';
+import epub from 'epub-gen-memory';
 
-    epub(options).then(
-        content => console.log("Ebook Generated Successfully!"),
-	    err => console.error("Failed to generate Ebook because of ", err)
-    );
+epub(options).then(
+    content => console.log("Ebook Generated Successfully!"),
+    err => console.error("Failed to generate Ebook because of ", err)
+);
 ```
 
 See [JSZip documentation](https://github.com/Stuk/jszip/blob/master/documentation/howto/write_zip.md) on how to get the zip to the user. For a nodejs example please see the tests.
@@ -37,27 +37,27 @@ See [JSZip documentation](https://github.com/Stuk/jszip/blob/master/documentatio
 In environments where `SharedArrayBuffer` is not available, you might want to instead import from `epub-gen-memory/sabstub`, which includes a non-functional stub:
 
 ```js
-    import epub from 'epub-gen-memory/sabstub';
+import epub from 'epub-gen-memory/sabstub';
 ```
 
 The package also includes a [browserify](https://www.npmjs.com/package/browserify)d bundle (UMD) as `epub-gen-memory/bundle`. It is recommended to use the bundle if you want to build for the browser. The bundle is also available from a CDN: [UNPKG](https://unpkg.com/epub-gen-memory). The bundle also includes the proper return type for the browser (`Blob` instead of `Buffer`).
 
 ```js
-    import epub from 'epub-gen-memory/bundle';
+import epub from 'epub-gen-memory/bundle';
 ```
 
 **Note**: This library was written in TypeScript and thus uses ESM exports, but it was compiled to CommonJS, so you can also use
 
 ```js
-    const epub = require('epub-gen-memory').default;
+const epub = require('epub-gen-memory').default;
 ```
 
 
 ## API
 
 ```js
-    import epub, { EPub, optionsDefaults, chapterDefaults } from 'epub-gen-memory';
-    import type { Options, Content, Chapter, Font } from 'epub-gen-memory';
+import epub, { EPub, optionsDefaults, chapterDefaults } from 'epub-gen-memory';
+import type { Options, Content, Chapter, Font } from 'epub-gen-memory';
 ```
 
 
@@ -83,14 +83,14 @@ protected:
 
 ### `optionsDefaults([version])`
 
-- `version`: `number` (default `3`) Defaults used for `Options`
-- Returns: `Options`
+- `version`: `number` (default `3`) Epub version
+- Returns: `Options` defaults
 
 
 ### `chapterDefaults(index)`
 
 - `index`: `number` of the chapter
-Returns: `Chapter`
+- Returns: `Chapter` defaults
 
 
 ### Options
@@ -120,7 +120,7 @@ Returns: `Chapter`
 - `version`: `number` (optional, default `3`)
     Version of the generated EPUB, `3` for the latest version (http://idpf.org/epub/30) or `2` for the previous version (http://idpf.org/epub/201)
 - `fetchTimeout`: `number` (optional, default `20000`)
-    Timeout time for requests, in milliseconds
+    Timeout time for requests, in milliseconds; Browsers need to support `AbortController` and signals for this to work
 - `verbose`: `boolean` (optional, default `false`)
     Whether to log progress messages
 
