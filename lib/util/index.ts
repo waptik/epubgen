@@ -68,7 +68,7 @@ export const validateAndNormalizeOptions = (options: Options) => {
     ...options,
   } as NormOptions;
   opt.author = normName(opt.author);
-  opt.fonts = opt.fonts.map(font => ({ ...font, mediaType: getType(font.url.replace(/\?.*/, ""))! }));
+  opt.fonts = opt.fonts.map(font => ({ ...font, mediaType: getType(font.filename)! }));
   opt.date = new Date(opt.date).toISOString();
   return opt;
 };

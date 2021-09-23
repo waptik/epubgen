@@ -8,6 +8,7 @@ console.log(chalk.blue`{bold Running all tests in} ${tests}\n`);
 
 
 
+let passed = 0, failed = 0;
 fs.readdirSync(tests).filter(file => file.endsWith('.js')).forEach(file => {
   console.log(chalk`\n{bold Executing test} ${file}`);
   const ret = spawnSync('node', ['-r', 'source-map-support/register', '--unhandled-rejections=strict', path.resolve(tests, file)], {
@@ -15,7 +16,13 @@ fs.readdirSync(tests).filter(file => file.endsWith('.js')).forEach(file => {
   });
   if (ret.status === 0) {
     console.log(chalk.green`Test ${file} passed`);
+    passed++;
   } else {
     console.log(chalk.red.bold`Test ${file} failed: exit ${ret.status}`);
+    failed++;
   }
 });
+
+console.log(chalk`\n\nTests: {green.bold ${passed} passed}, {red.bold ${failed} failed}`);
+if (failed)
+  process.exit(failed);
