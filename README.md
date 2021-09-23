@@ -1,4 +1,4 @@
-# epub-gen-memory -- a library to make EPUBs from HTML
+# epub-gen-memory --- a library to make EPUBs from HTML
 
 Generate EPUB books from HTML with a simple API in Node.js or the browser.
 
@@ -75,6 +75,7 @@ import type { Options, Content, Chapter, Font } from 'epub-gen-memory';
 - `render(): Promise<EPub>`
 - `genEpub(): Promise<Buffer>` (Browser `Promise<Blob>`)
 - `generateAsync(options: JSZipGeneratorOptions): Promise<...>` see [JSZip.generateAsync](https://stuk.github.io/jszip/documentation/api_jszip/generate_async.html)
+
 protected:
 - `generateTemplateFiles(): Promise<void>`
 - `downloadAllFonts(): Promise<void>`
@@ -93,6 +94,7 @@ protected:
 - `index`: `number` of the chapter
 - Returns: `Chapter` defaults
 
+&nbsp;
 
 ### Options
 
@@ -181,4 +183,4 @@ Please see the tests for the code used.
 
 ## Credits
 
-This library is based on the work of @cyrilis.
+This library is based on the work of [@cyrilis](https://github.com/cyrilis).
