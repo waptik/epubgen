@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "prebuild": "node scripts/templates.js",
-    "build": "tsc && tsc-alias",
+    "build": "tsc --inlineSourceMap false --inlineSources false && tsc-alias",
     "bundle": "browserify --debug -e ./dist/lib/SharedArrayBufferStub.js -e ./dist/lib/index.js -s epub-gen -o dist/bundle.js && terser --mangle --compress --comments false -o dist/bundle.min.js -- dist/bundle.js",
     "dev": "node scripts/templates.js -w & tsc -w & tsc-alias -w",
     "test": "node -r source-map-support/register --trace-uncaught --unhandled-rejections=strict scripts/runner.js",
