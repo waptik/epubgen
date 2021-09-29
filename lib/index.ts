@@ -104,25 +104,31 @@ export class EPub {
     if (!this.options.fonts.length) return this.log('No fonts to download');
     const oebps = this.zip.folder('OEBPS')!;
     const fonts = oebps.folder('fonts')!;
-    const fontContents = await Promise.all(
-      this.options.fonts.map(font =>
-        retryFetch(font.url, this.options.fetchTimeout, this.options.retryTimes, this.log)
-          .then(res => (this.log(`Downloaded font ${font.url}`), { ...font, data: res })))
-    );
-    fontContents.forEach(font => fonts.file(font.filename, font.data));
+
+    for (let i = 0; i < this.options.fonts.length; i += this.options.batchSize) {
+      const fontContents = await Promise.all(
+        this.options.fonts.slice(i, i + this.options.batchSize).map(font =>
+          retryFetch(font.url, this.options.fetchTimeout, this.options.retryTimes, this.log)
+            .then(res => (this.log(`Downloaded font ${font.url}`), { ...font, data: res })))
+      );
+      fontContents.forEach(font => fonts.file(font.filename, font.data));
+    }
   }
 
   protected async downloadAllImages() {
     if (!this.images.length) return this.log('No images to download');
     const oebps = this.zip.folder('OEBPS')!;
     const images = oebps.folder('images')!;
-    const imageContents = await Promise.all(
-      this.images.map(image =>
-        retryFetch(image.url, this.options.fetchTimeout, this.options.retryTimes, this.log)
-          .then(res => (this.log(`Downloaded image ${image.url}`), { ...image, data: res }))
-      )
-    );
-    imageContents.forEach(image => images.file(`${image.id}.${image.extension}`, image.data));
+
+    for (let i = 0; i < this.images.length; i += this.options.batchSize) {
+      const imageContents = await Promise.all(
+        this.images.slice(i, i + this.options.batchSize).map(image =>
+          retryFetch(image.url, this.options.fetchTimeout, this.options.retryTimes, this.log)
+            .then(res => (this.log(`Downloaded image ${image.url}`), { ...image, data: res }))
+        )
+      );
+      imageContents.forEach(image => images.file(`${image.id}.${image.extension}`, image.data));
+    }
   }
 
   protected async makeCover() {

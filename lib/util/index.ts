@@ -39,6 +39,7 @@ export const optionsDefaults = (version = 3) => ({
   version,
   fetchTimeout: 20000,
   retryTimes: 3,
+  batchSize: 100,
   verbose: false,
 });
 

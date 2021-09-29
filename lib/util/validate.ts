@@ -39,6 +39,7 @@ export type Options = {
   version?: number,
   fetchTimeout?: number,
   retryTimes?: number,
+  batchSize?: number,
   verbose?: boolean,
 };
 
@@ -46,7 +47,7 @@ const name = ow.optional.any(ow.string, ow.array.ofType(ow.string), ow.undefined
 const filename = ow.optional.string.is(s => (s.indexOf('/') === -1 && s.indexOf('\\') === -1) || `Filename must not include slashes, got \`${s}\``);
 const filenameReq = ow.string.is(s => (s.indexOf('/') === -1 && s.indexOf('\\') === -1) || `Filename must not include slashes, got \`${s}\``);
 
-export const chapterPredicate: ObjectPredicate<Chapter> = ow.object.exactShape({
+export const chapterPredicate: ObjectPredicate<Chapter> = ow.object.partialShape({
   title: ow.optional.string,
   author: name,
   content: ow.string,
@@ -56,12 +57,12 @@ export const chapterPredicate: ObjectPredicate<Chapter> = ow.object.exactShape({
   url: ow.optional.string,
 });
 
-export const fontPredicate: ObjectPredicate<Font> = ow.object.exactShape({
+export const fontPredicate: ObjectPredicate<Font> = ow.object.partialShape({
   filename: filenameReq,
   url: ow.string,
 });
 
-export const optionsPredicate: ObjectPredicate<Options> = ow.object.exactShape({
+export const optionsPredicate: ObjectPredicate<Options> = ow.object.partialShape({
   title: ow.string,
   author: name,
   publisher: ow.optional.string,
@@ -83,6 +84,7 @@ export const optionsPredicate: ObjectPredicate<Options> = ow.object.exactShape({
     `Expected version to be 3 or 2, got \`${x}\``),
   fetchTimeout: ow.optional.number.positive,
   retryTimes: ow.optional.number.positive,
+  batchSize: ow.optional.number.positive,
   verbose: ow.optional.boolean,
 });
 

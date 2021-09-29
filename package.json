@@ -1,6 +1,6 @@
 {
   "name": "epub-gen-memory",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A library to generate EPUB from HTML",
   "main": "dist/lib/index.js",
   "unpkg": "dist/bundle.min.js",
@@ -21,7 +21,7 @@
     "dev": "node scripts/templates.js -w & tsc -w & tsc-alias -w",
     "test": "node -r source-map-support/register --trace-uncaught --unhandled-rejections=strict scripts/runner.js",
     "clean": "rimraf dist lib/templates *.epub .tsbuildinfo",
-    "prepack": "npm run clean && npm run build && npm run bundle && echo tests > dist/.npmignore"
+    "prepack": "npm run clean && npm run build && npm run bundle && echo tests > dist/.npmignore && echo bundle.js >> dist/.npmignore"
   },
   "repository": {
     "type": "git",

@@ -6,7 +6,7 @@ See [JSZip Support table](https://stuk.github.io/jszip/) for which engines are s
 
 ------
 
-This EPUB library will generate the needed files, as well as download all referenced images. Note that all fonts and all images respectively are downloaded in parallel, so please keep that in mind when adjusting `fetchTimeout`.
+This EPUB library will generate the needed files, as well as download all referenced images. Note that all fonts and all images respectively are downloaded in parallel in batches, so please keep that in mind when adjusting `fetchTimeout`.
 
 Note that in the browser, only images on servers with CORS enabled can be downloaded.
 
@@ -40,7 +40,7 @@ In environments where `SharedArrayBuffer` is not available, you might want to in
 import epub from 'epub-gen-memory/sabstub';
 ```
 
-The package also includes a [browserify](https://www.npmjs.com/package/browserify)d bundle (UMD) as `epub-gen-memory/bundle`. It is recommended to use the bundle if you want to build for the browser. The bundle is also available from a CDN: [UNPKG](https://unpkg.com/epub-gen-memory). The bundle also includes the proper return type for the browser (`Blob` instead of `Buffer`).
+The package also includes a [browserify](https://www.npmjs.com/package/browserify)d bundle (UMD) as `epub-gen-memory/bundle`. It is possible to use the bundle if you want to build for the browser. The bundle is also available from a CDN: [UNPKG](https://unpkg.com/epub-gen-memory) ([latest](https://unpkg.com/epub-gen-memory), [latest 1.x](https://unpkg.com/epub-gen-memory@^1.0.0)). The bundle also includes the proper return type for the browser (`Promise<Blob>` instead of `Promise<Buffer>`).
 
 ```js
 import epub from 'epub-gen-memory/bundle';
@@ -130,6 +130,8 @@ protected:
     Timeout time for requests, in milliseconds; Browsers need to support `AbortController` and signals for this to work
 - `retryTimes`: `number` (optional, default `3`)<br />
     How many times to retry fetching resources
+- `batchSize`: `number` (optional, default `100`)<br />
+    The size of the batches to use when downloading files
 - `verbose`: `boolean` (optional, default `false`)<br />
     Whether to log progress messages
 
