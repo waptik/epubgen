@@ -24,7 +24,9 @@ export function normalizeHTML(this: EPub, index: number, data: string) {
 
     if (this.options.version === 2 && allowedXhtml11Tags.indexOf(element.tagName.toLowerCase() as typeof allowedXhtml11Tags[number]) === -1) {
       if (this.options.verbose) console.warn(`Warning (content[${index}]): tag ${element.tagName} isn't allowed on EPUB 2/XHTML 1.1 DTD.`);
-      element.replaceWith(`<div>${element.innerHTML}</div>`);
+      const div = document.createElement('div');
+      div.innerHTML = element.innerHTML;
+      element.replaceWith(div);
     }
   });
 
