@@ -1,5 +1,4 @@
 import type { Content, Options } from '../lib';
-import { optionsDefaults } from '../lib/util';
 
 const date = new Date();
 date.setFullYear(2000);
@@ -10,40 +9,6 @@ export const optionsAlice: Options = {
   publisher: "Macmillan & Co.",
   date: date.toString(),
   cover: "http://orig10.deviantart.net/e272/f/2013/255/0/0/alice_in_wonderland_book_cover_by_pannucabaguana-d6m003p.jpg",
-  fonts: [
-    { url: 'https://fonts.gstatic.com/s/lato/v20/S6uyw4BMUTPHjxAwXjeu.woff2', filename: 'lato-ext.woff2' },
-    { url: 'https://fonts.gstatic.com/s/lato/v20/S6uyw4BMUTPHjx4wXg.woff2', filename: 'lato.woff2' },
-    { url: 'http://fonts.gstatic.com/s/adventpro/v4/1NxMBeKVcNNH2H46AUR3wfesZW2xOQ-xsNqO47m55DA.ttf', filename: 'advent.ttf' },
-  ],
-  css: `${optionsDefaults(3).css}
-  /* latin-ext */
-  @font-face {
-    font-family: 'Lato';
-    font-style: normal;
-    font-weight: 400;
-    src: url(./fonts/lato-ext.woff2) format('woff2');
-    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
-  }
-  /* latin */
-  @font-face {
-    font-family: 'Lato';
-    font-style: normal;
-    font-weight: 400;
-    src: url(./fonts/lato.woff2) format('woff2');
-    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-  }
-
-  @font-face {
-    font-family: 'Advent Pro';
-    font-style: normal;
-    font-weight: 400;
-    src: url(./fonts/advent.ttf) format('ttf');
-  }
-
-  body {
-    font-family: Lato;
-  }
-  `,
   version: 3,
   verbose: true,
 };
@@ -51,7 +16,7 @@ export const optionsAlice: Options = {
 export const contentAlice: Content = [
     {
       title: "About the author",
-      content: `<main><p><img src="http://www.alice-in-wonderland.net/wp-content/uploads/1book1.jpg"/><p>Charles Lutwidge Dodgson (January 27, 1832 &#x2013; January 14, 1898), better known by the pen name Lewis Carroll, was an English author, mathematician, logician, Anglican clergyman, and photographer. His most famous writings are Alice&apos;s Adventures in Wonderland and its sequel Through the Looking-Glass as well as the poems &quot;The Hunting of the Snark&quot; and &quot;Jabberwocky&quot;, all considered to be within the genre of literary nonsense. His facility at word play, logic, and fantasy has delighted audiences ranging from children to the literary elite. But beyond this, his work has become embedded deeply in modern culture. He has directly influenced many artists. There are societies dedicated to the enjoyment and promotion of his works and the investigation of his life in many parts of the world including North America, Japan, the United Kingdom, and New Zealand. His biography has recently come under much question as a result of what some call the &quot;Carroll Myth.&quot;</p></main>`,
+      content: `<p>Charles Lutwidge Dodgson (January 27, 1832 &#x2013; January 14, 1898), better known by the pen name Lewis Carroll, was an English author, mathematician, logician, Anglican clergyman, and photographer. His most famous writings are Alice&apos;s Adventures in Wonderland and its sequel Through the Looking-Glass as well as the poems &quot;The Hunting of the Snark&quot; and &quot;Jabberwocky&quot;, all considered to be within the genre of literary nonsense. His facility at word play, logic, and fantasy has delighted audiences ranging from children to the literary elite. But beyond this, his work has become embedded deeply in modern culture. He has directly influenced many artists. There are societies dedicated to the enjoyment and promotion of his works and the investigation of his life in many parts of the world including North America, Japan, the United Kingdom, and New Zealand. His biography has recently come under much question as a result of what some call the &quot;Carroll Myth.&quot;</p>`,
       url: 'http://www.alice-in-wonderland.net',
       author: 'Charles Lutwidge Dodgson',
       beforeToc: true,

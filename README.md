@@ -2,7 +2,7 @@
 
 Generate EPUB books from HTML with a simple API in Node.js or the browser.
 
-See [JSZip Support table](https://stuk.github.io/jszip/) for which engines are supported. In addition, browsers need to support `fetch` as well as `DOMParser` to replace `node-fetch` and `jsdom`.
+See [JSZip Support table](https://stuk.github.io/jszip/) for which engines are supported. In addition, browsers need to support `fetch` as well as `DOMParser` and `XMLSerializer` to replace `node-fetch` and `htmlparser2` (plus ecosystem).
 
 ------
 

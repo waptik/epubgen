@@ -15,7 +15,7 @@ fs.readdirSync(tests).filter(file => file.endsWith('.js')).forEach(file => {
     stdio: 'inherit',
   });
   if (ret.status === 0) {
-    console.log(chalk.green`Test ${file} passed`);
+    console.log(chalk.green`Test ${file} ran`);
     passed++;
   } else {
     console.log(chalk.red.bold`Test ${file} failed: exit ${ret.status}`);
@@ -23,6 +23,6 @@ fs.readdirSync(tests).filter(file => file.endsWith('.js')).forEach(file => {
   }
 });
 
-console.log(chalk`\n\nTests: {green.bold ${passed} passed}, {red.bold ${failed} failed}`);
+console.log(chalk`\n\nTests: {green.bold ${passed} ran}, {red.bold ${failed} failed}`);
 if (failed)
   process.exit(failed);
