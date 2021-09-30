@@ -184,7 +184,7 @@ You can then use the fonts as such (assuming you have a font with filename `Merr
 
 _From Lewis Carroll "Alice's Adventures in Wonderland", based on text at https://www.cs.cmu.edu/~rgs/alice-table.html and images from http://www.alice-in-wonderland.net/resources/pictures/alices-adventures-in-wonderland._
 
-Please see the tests for the code used.
+Please see the tests for the code used. EPUBs are generated next to the built test files.
 
 
 ## Credits

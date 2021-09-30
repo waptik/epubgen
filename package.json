@@ -20,12 +20,12 @@
     "bundle": "browserify --debug -e ./dist/lib/SharedArrayBufferStub.js -e ./dist/lib/index.js -s epub-gen -o dist/bundle.js && terser --mangle --compress --comments false -o dist/bundle.min.js -- dist/bundle.js",
     "dev": "node scripts/templates.js -w & tsc -w & tsc-alias -w",
     "test": "node -r source-map-support/register --trace-uncaught --unhandled-rejections=strict scripts/runner.js",
-    "clean": "rimraf dist lib/templates *.epub .tsbuildinfo",
+    "clean": "rimraf dist lib/templates .tsbuildinfo",
     "prepack": "npm run clean && npm run build && npm run bundle && echo tests > dist/.npmignore && echo bundle.js >> dist/.npmignore"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cpiber/epub-gen.git"
+    "url": "https://github.com/cpiber/epub-gen-memory.git"
   },
   "keywords": [
     "epub",
@@ -37,9 +37,9 @@
   "author": "cpiber",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cpiber/epub-gen/issues"
+    "url": "https://github.com/cpiber/epub-gen-memory/issues"
   },
-  "homepage": "https://github.com/cpiber/epub-gen",
+  "homepage": "https://github.com/cpiber/epub-gen-memory",
   "dependencies": {
     "abort-controller": "^3.0.0",
     "css-select": "^4.1.3",
@@ -58,7 +58,6 @@
   "devDependencies": {
     "@types/diacritics": "^1.3.1",
     "@types/ejs": "^3.1.0",
-    "@types/jsdom": "^16.2.13",
     "@types/mime": "^2.0.3",
     "@types/node-fetch": "^2.0.0",
     "@types/uslug": "^1.0.1",

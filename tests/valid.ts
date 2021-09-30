@@ -41,17 +41,17 @@ optionsAlice.version = 2;
 
 contentAlice.push({
   ...contentAlice[1],
-  content: `<main attr="bla"><img somerandomattr>${contentAlice[1].content.replace('<img', '<IMG')}</main>`,
+  content: `<main attr="bla"><img somerandomattr>${contentAlice[1].content.replace('<img', '<IMG')}</main><div>`,
 });
 
 
 (async () => {
   const content = await epub(optionsAlice, contentAlice);
-  await writeFile('./valid.epub', Buffer.from(content));
+  await writeFile(`${__filename.slice(0, -3)}.epub`, Buffer.from(content));
 
   contentAlice.push({
     content: await fetch('http://example.com/').then(res => res.text()),
   });
   const content2 = await epub(optionsAlice, contentAlice);
-  await writeFile('./valid_html.epub', Buffer.from(content2));
+  await writeFile(`${__filename.slice(0, -3)}_html.epub`, Buffer.from(content2));
 })();

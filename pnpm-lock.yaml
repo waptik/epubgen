@@ -3,7 +3,6 @@ lockfileVersion: 5.3
 specifiers:
   '@types/diacritics': ^1.3.1
   '@types/ejs': ^3.1.0
-  '@types/jsdom': ^16.2.13
   '@types/mime': ^2.0.3
   '@types/node-fetch': ^2.0.0
   '@types/uslug': ^1.0.1
@@ -50,7 +49,6 @@ dependencies:
 devDependencies:
   '@types/diacritics': 1.3.1
   '@types/ejs': 3.1.0
-  '@types/jsdom': 16.2.13
   '@types/mime': 2.0.3
   '@types/node-fetch': 2.5.12
   '@types/uslug': 1.0.1
@@ -116,14 +114,6 @@ packages:
     resolution: {integrity: sha512-DCg+Ka+uDQ31lJ/UtEXVlaeV3d6t81gifaVWKJy4MYVVgvJttyX/viREy+If7fz+tK/gVxTGMtyrFPnm4gjrVA==}
     dev: true
 
-  /@types/jsdom/16.2.13:
-    resolution: {integrity: sha512-8JQCjdeAidptSsOcRWk2iTm9wCcwn9l+kRG6k5bzUacrnm1ezV4forq0kWjUih/tumAeoG+OspOvQEbbRucBTw==}
-    dependencies:
-      '@types/node': 16.9.4
-      '@types/parse5': 6.0.1
-      '@types/tough-cookie': 4.0.1
-    dev: true
-
   /@types/mime/2.0.3:
     resolution: {integrity: sha512-Jus9s4CDbqwocc5pOAnh8ShfrnMcPHuJYzVcSUU7lrh8Ni5HuIqX3oilL86p3dlTrk0LzHRCgA/GQ7uNCw6l2Q==}
     dev: true
@@ -137,14 +127,6 @@ packages:
 
   /@types/node/16.9.4:
     resolution: {integrity: sha512-KDazLNYAGIuJugdbULwFZULF9qQ13yNWEBFnfVpqlpgAAo6H/qnM9RjBgh0A0kmHf3XxAKLdN5mTIng9iUvVLA==}
-    dev: true
-
-  /@types/parse5/6.0.1:
-    resolution: {integrity: sha512-ARATsLdrGPUnaBvxLhUlnltcMgn7pQG312S8ccdYlnyijabrX9RN/KN/iGj9Am96CoW8e/K9628BA7Bv4XHdrA==}
-    dev: true
-
-  /@types/tough-cookie/4.0.1:
-    resolution: {integrity: sha512-Y0K95ThC3esLEYD6ZuqNek29lNX2EM1qxV8y2FTLUB0ff5wWrk7az+mLrnNFUnaXcgKye22+sFBRXOgpPILZNg==}
     dev: true
 
   /@types/uslug/1.0.1:

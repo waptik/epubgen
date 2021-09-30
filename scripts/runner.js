@@ -24,5 +24,6 @@ fs.readdirSync(tests).filter(file => file.endsWith('.js')).forEach(file => {
 });
 
 console.log(chalk`\n\nTests: {green.bold ${passed} ran}, {red.bold ${failed} failed}`);
+console.log('Please verify EPUBs and logs');
 if (failed)
   process.exit(failed);
