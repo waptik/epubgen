@@ -1,23 +1,22 @@
 import { remove as removeDiacritics } from 'diacritics';
 import { getType } from 'mime';
 import ow from 'ow';
-import chapterXHTML2 from 'templates/epub2/chapter.xhtml.ejs.js';
-import contentOPF2 from 'templates/epub2/content.opf.ejs.js';
-import tocXHTML2 from 'templates/epub2/toc.xhtml.ejs.js';
-import chapterXHTML3 from 'templates/epub3/chapter.xhtml.ejs.js';
-import contentOPF3 from 'templates/epub3/content.opf.ejs.js';
-import tocXHTML3 from 'templates/epub3/toc.xhtml.ejs.js';
-import css from 'templates/template.css.js';
-import tocNCX from 'templates/toc.ncx.ejs.js';
+import chapterXHTML2 from 'templates/epub2/chapter.xhtml.ejs';
+import contentOPF2 from 'templates/epub2/content.opf.ejs';
+import tocXHTML2 from 'templates/epub2/toc.xhtml.ejs';
+import chapterXHTML3 from 'templates/epub3/chapter.xhtml.ejs';
+import contentOPF3 from 'templates/epub3/content.opf.ejs';
+import tocXHTML3 from 'templates/epub3/toc.xhtml.ejs';
+import css from 'templates/template.css';
+import tocNCX from 'templates/toc.ncx.ejs';
 import uslug from 'uslug';
 import type { EPub } from '..';
 import { normalizeHTML } from './html';
 import { Chapter, chapterPredicate, Content, Font, NormChapter, NormOptions, Options, optionsPredicate } from './validate';
 
-export * from './constants';
 export * from './html';
 export * from './other';
-export { Options, NormOptions, Content, Chapter, NormChapter, Font };
+export { Options, NormOptions, Content, Chapter, NormChapter, Font, optionsPredicate, chapterPredicate };
 
 
 export const optionsDefaults = (version = 3) => ({
@@ -78,12 +77,11 @@ export const validateAndNormalizeOptions = (options: Options) => {
 export function validateAndNormalizeChapters(this: EPub, chapters: Chapter[]) {
   ow(chapters, 'content', ow.array.ofType(chapterPredicate));
 
-  chapters = chapters.map((chapter, index) => {
+  return chapters.map((chapter, index) => {
     const ch = validateAndNormalizeChapter(chapter, index);
     ch.content = normalizeHTML.call(this, index, chapter.content)
     return ch;
   });
-  return chapters as NormChapter[];
 }
 
 export const validateAndNormalizeChapter = (chapter: Chapter, index: number) => {

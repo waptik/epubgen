@@ -2,7 +2,8 @@ import { remove as removeDiacritics } from 'diacritics';
 import { render as renderTemplate } from 'ejs';
 import jszip, { JSZipGeneratorOptions } from 'jszip';
 import { getExtension, getType } from 'mime';
-import { Chapter, chapterDefaults, Content, Font, Image, NormChapter, NormOptions, Options, optionsDefaults, retryFetch, type, uuid, validateAndNormalizeChapters, validateAndNormalizeOptions } from './util';
+import ow, { BasePredicate } from 'ow';
+import { Chapter, chapterDefaults, Content, Font, Image, NormChapter, NormOptions, Options, optionsDefaults, optionsPredicate, retryFetch, type, uuid, validateAndNormalizeChapters, validateAndNormalizeOptions } from './util';
 
 
 export { Options, Content, Chapter, Font, optionsDefaults, chapterDefaults };
@@ -139,5 +140,16 @@ export class EPub {
   }
 }
 
-const epub = (options: Options, content: Content) => new EPub(options, content).genEpub();
+const is = <T>(v: unknown, pred: BasePredicate<T>): v is T => ow.isValid(v, pred); // this should not be necessary in a future version of ow
+const epub = (optionsOrTitle: Options | string, content: Content, ...args: (boolean | number)[]) => {
+  ow(optionsOrTitle, ow.any(optionsPredicate, ow.string));
+  const options = is(optionsOrTitle, ow.string) ? { title: optionsOrTitle } : optionsOrTitle;
+  ow(args, ow.array.ofType(ow.any(ow.boolean, ow.number)));
+  args.forEach(arg => {
+    if (is(arg, ow.boolean)) options.verbose = arg;
+    else options.version = arg;
+  });
+
+  return new EPub(options, content).genEpub();
+};
 export default epub;

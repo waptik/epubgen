@@ -61,10 +61,11 @@ import type { Options, Content, Chapter, Font } from 'epub-gen-memory';
 ```
 
 
-### `epub(options, content)`
+### `epub(optionsOrTitle, content, [version | verbose][])`
 
-- `options`: `Options` (see [below](#options))
+- `optionsOrTitle`: `Options | string` if string, then equivalent to `{ title: <optionsOrTitle> }` (see [below](#options))
 - `content`: `Chapter[]` (see [below](#chapters))
+- varargs: `version`: `3 | 2`, `verbose`: `boolean` (in any order or not at all)
 - Returns: `Promise<Buffer>`
 - **Browser** Returns: `Promise<Blob>`
 
