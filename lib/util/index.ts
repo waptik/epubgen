@@ -74,7 +74,7 @@ export const validateAndNormalizeOptions = (options: Options) => {
   return opt;
 };
 
-export function validateAndNormalizeChapters(this: EPub, chapters: Chapter[]) {
+export function validateAndNormalizeChapters(this: EPub, chapters: readonly Chapter[]) {
   ow(chapters, 'content', ow.array.ofType(chapterPredicate));
 
   return chapters.map((chapter, index) => {

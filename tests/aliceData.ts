@@ -1,4 +1,4 @@
-import type { Content, Options } from '../lib';
+import type { Chapter, Options } from '../lib';
 
 const date = new Date();
 date.setFullYear(2000);
@@ -13,7 +13,7 @@ export const optionsAlice: Options = {
   verbose: true,
 };
 
-export const contentAlice: Content = [
+export const contentAlice: Chapter[] = [
     {
       title: "About the author",
       content: `<p>Charles Lutwidge Dodgson (January 27, 1832 &#x2013; January 14, 1898), better known by the pen name Lewis Carroll, was an English author, mathematician, logician, Anglican clergyman, and photographer. His most famous writings are Alice&apos;s Adventures in Wonderland and its sequel Through the Looking-Glass as well as the poems &quot;The Hunting of the Snark&quot; and &quot;Jabberwocky&quot;, all considered to be within the genre of literary nonsense. His facility at word play, logic, and fantasy has delighted audiences ranging from children to the literary elite. But beyond this, his work has become embedded deeply in modern culture. He has directly influenced many artists. There are societies dedicated to the enjoyment and promotion of his works and the investigation of his life in many parts of the world including North America, Japan, the United Kingdom, and New Zealand. His biography has recently come under much question as a result of what some call the &quot;Carroll Myth.&quot;</p>`,
