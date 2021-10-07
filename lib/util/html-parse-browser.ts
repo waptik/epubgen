@@ -13,13 +13,13 @@ export function fixHTML(this: EPub, index: number, html: string, imgCB: CB) {
   Array.from(document.body.querySelectorAll('*')).reverse().forEach(element => {
     for (const a of Array.from(element.attributes)) {
       if (allowedAttributes.indexOf(a.name as typeof allowedAttributes[number]) === -1) {
-        if (this.options.verbose) console.warn(`Warning (content[${index}]): attribute ${a.name} isn't allowed.`);
+        this.warn(`Warning (content[${index}]): attribute ${a.name} isn't allowed.`);
         element.removeAttribute(a.name);
       }
     }
 
     if (this.options.version === 2 && allowedXhtml11Tags.indexOf(element.tagName as typeof allowedXhtml11Tags[number]) === -1) {
-      if (this.options.verbose) console.warn(`Warning (content[${index}]): tag ${element.tagName} isn't allowed in EPUB 2/XHTML 1.1 DTD.`);
+      this.warn(`Warning (content[${index}]): tag ${element.tagName} isn't allowed in EPUB 2/XHTML 1.1 DTD.`);
       const div = document.createElement('div');
       for (const a of Array.from(element.attributes)) div.setAttribute(a.name, a.value);
       div.innerHTML = element.innerHTML;

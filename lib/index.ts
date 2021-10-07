@@ -1,8 +1,7 @@
-import { remove as removeDiacritics } from 'diacritics';
 import { render as renderTemplate } from 'ejs';
 import jszip, { JSZipGeneratorOptions } from 'jszip';
 import { getExtension, getType } from 'mime';
-import ow, { BasePredicate } from 'ow';
+import ow from 'ow';
 import { Chapter, chapterDefaults, Content, Font, Image, NormChapter, NormOptions, Options, optionsDefaults, optionsPredicate, retryFetch, type, uuid, validateAndNormalizeChapters, validateAndNormalizeOptions } from './util';
 
 
@@ -16,15 +15,26 @@ export class EPub {
   protected cover?: { extension: string, mediaType: string };
 
   protected log: typeof console.log;
+  protected warn: typeof console.warn;
   protected zip: InstanceType<jszip>;
 
   constructor(options: Options, content: Content) {
     this.options = validateAndNormalizeOptions(options);
-    this.options.lang = removeDiacritics(this.options.lang);
-    this.content = validateAndNormalizeChapters.call(this, content);
+    switch (this.options.verbose) {
+      case true:
+        this.log = console.log.bind(console);
+        this.warn = console.warn.bind(console);
+        break;
+      case false:
+        this.log = this.warn = () => {};
+        break;
+      default:
+        this.log = this.options.verbose.bind(null, 'log');
+        this.warn = this.options.verbose.bind(null, 'warn');
+        break;
+    }
     this.uuid = uuid();
-
-    this.log = this.options.verbose ? console.log.bind(console) : () => {};
+    this.content = validateAndNormalizeChapters.call(this, content);
     this.zip = new jszip();
     this.zip.file('mimetype', 'application/epub+zip', { compression: 'STORE' });
 
@@ -140,13 +150,12 @@ export class EPub {
   }
 }
 
-const is = <T>(v: unknown, pred: BasePredicate<T>): v is T => ow.isValid(v, pred); // this should not be necessary in a future version of ow
 const epub = (optionsOrTitle: Options | string, content: Content, ...args: (boolean | number)[]) => {
   ow(optionsOrTitle, ow.any(optionsPredicate, ow.string));
-  const options = is(optionsOrTitle, ow.string) ? { title: optionsOrTitle } : optionsOrTitle;
+  const options = ow.isValid(optionsOrTitle, ow.string) ? { title: optionsOrTitle } : optionsOrTitle;
   ow(args, ow.array.ofType(ow.any(ow.boolean, ow.number)));
   args.forEach(arg => {
-    if (is(arg, ow.boolean)) options.verbose = arg;
+    if (ow.isValid(arg, ow.boolean)) options.verbose = arg;
     else options.version = arg;
   });
 

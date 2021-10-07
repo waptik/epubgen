@@ -19,13 +19,13 @@ export function fixHTML(this: EPub, index: number, html: string, imgCB: CB) {
   selectAll<Node, Element>(allNodes, document).reverse().forEach(element => {
     for (const name of Object.keys(element.attribs)) {
       if (allowedAttributes.indexOf(name as typeof allowedAttributes[number]) === -1) {
-        if (this.options.verbose) console.warn(`Warning (content[${index}]): attribute ${name} isn't allowed.`);
+        this.warn(`Warning (content[${index}]): attribute ${name} isn't allowed.`);
         delete element.attribs[name];
       }
     }
 
     if (this.options.version === 2 && allowedXhtml11Tags.indexOf(element.tagName as typeof allowedXhtml11Tags[number]) === -1) {
-      if (this.options.verbose) console.warn(`Warning (content[${index}]): tag ${element.tagName} isn't allowed in EPUB 2/XHTML 1.1 DTD.`);
+      this.warn(`Warning (content[${index}]): tag ${element.tagName} isn't allowed in EPUB 2/XHTML 1.1 DTD.`);
       element.tagName = 'div'; // yay for object-based trees
     }
   });

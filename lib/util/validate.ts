@@ -1,4 +1,4 @@
-import ow, { ObjectPredicate } from 'ow';
+import ow, { ObjectPredicate, Predicate } from 'ow';
 import { Merge } from 'type-fest';
 
 export type Chapter = {
@@ -18,6 +18,7 @@ export type Font = {
   url: string,
 };
 
+export type LogFn = (type: 'log' | 'warn', ...args: any[]) => void;
 export type Options = {
   title: string,
   author?: string | string[],
@@ -40,7 +41,7 @@ export type Options = {
   fetchTimeout?: number,
   retryTimes?: number,
   batchSize?: number,
-  verbose?: boolean,
+  verbose?: boolean | LogFn,
 };
 
 const name = ow.optional.any(ow.string, ow.array.ofType(ow.string), ow.undefined);
@@ -85,7 +86,7 @@ export const optionsPredicate: ObjectPredicate<Options> = ow.object.partialShape
   fetchTimeout: ow.optional.number.positive,
   retryTimes: ow.optional.number.positive,
   batchSize: ow.optional.number.positive,
-  verbose: ow.optional.boolean,
+  verbose: ow.optional.any(ow.boolean, ow.function as Predicate<LogFn>),
 });
 
 

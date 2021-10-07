@@ -71,15 +71,20 @@ export const validateAndNormalizeOptions = (options: Options) => {
   opt.author = normName(opt.author);
   opt.fonts = opt.fonts.map(font => ({ ...font, mediaType: getType(font.filename)! }));
   opt.date = new Date(opt.date).toISOString();
+  opt.lang = removeDiacritics(opt.lang);
   return opt;
 };
 
 export function validateAndNormalizeChapters(this: EPub, chapters: readonly Chapter[]) {
   ow(chapters, 'content', ow.array.ofType(chapterPredicate));
 
+  let afterTOC = false;
   return chapters.map((chapter, index) => {
     const ch = validateAndNormalizeChapter(chapter, index);
-    ch.content = normalizeHTML.call(this, index, chapter.content)
+    ch.content = normalizeHTML.call(this, index, chapter.content);
+    if (afterTOC && ch.beforeToc)
+      this.warn(`Warning (content[${index}]): Got \`beforeToc=true\` after at least one \`beforeToc=false\`. Chapters will be out of order.`);
+    if (!ch.beforeToc) afterTOC = true;
     return ch;
   });
 }
