@@ -51,14 +51,7 @@ export const chapterDefaults = (index: number) => ({
 });
 
 
-export const normName = (name: string | string[] | undefined) => {
-  try {
-    ow(name, ow.string);
-    return [name];
-  } catch {
-    return (name || []) as string[];
-  }
-};
+export const normName = (name: string | string[] | undefined): string[] => ow.isValid(name, ow.string) ? [name] : (name || []);
 
 export const validateAndNormalizeOptions = (options: Options) => {
   ow(options, 'options', optionsPredicate);

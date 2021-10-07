@@ -99,61 +99,61 @@ protected:
 
 ### Options
 
-- `title`: `string`<br />
+- `title`: `string`  
     Title of the book
-- `author`: `string | string[]` (optional, default `['anonymous']`)<br />
+- `author`: `string | string[]` (optional, default `['anonymous']`)  
     Name of the author for the book, e.g. `"Alice"` or `["Alice", "Bob"]`
-- `publisher`: `string` (optional, default `anonymous`)<br />
+- `publisher`: `string` (optional, default `anonymous`)  
     Publisher name
-- `description`: `string` (optional)<br />
+- `description`: `string` (optional)  
     Book description
-- `cover`: `string` (optional)<br />
+- `cover`: `string` (optional)  
     Book cover image URL, e.g. `"http://abc.com/book-cover.jpg"`
-- `tocTitle`: `string` (optional, default `Table of Contents`)<br />
+- `tocTitle`: `string` (optional, default `Table of Contents`)  
     Title of the Table of Contents
-- `tocInTOC`: `boolean` (optional, default `true`)<br />
+- `tocInTOC`: `boolean` (optional, default `true`)  
     Whether to show the TOC entry in the reader's Table of Contents; only for EPUB2
-- `numberChaptersInTOC`: `boolean` (optional, default `true`)<br />
+- `numberChaptersInTOC`: `boolean` (optional, default `true`)  
     Automatically number entries in TOC
-- `prependChapterTitles`: `boolean` (optional, default `true`)<br />
+- `prependChapterTitles`: `boolean` (optional, default `true`)  
     Automatically put the title of the chapter before the content
-- `date`: `string` (optional, default today)<br />
+- `date`: `string` (optional, default today)  
     Publication date
-- `lang`: `string` (optional, default `en`)<br />
+- `lang`: `string` (optional, default `en`)  
     Language code of the book
-- `css`: `string` (optional)<br />
+- `css`: `string` (optional)  
     CSS string, replaces our default styles, e.g: `"body{background: #000}"`
-- `fonts`: `Font[]` (optional)<br />
+- `fonts`: `Font[]` (optional)  
     Array of fonts to include, see [below](#fonts)
-- `version`: `number` (optional, default `3`)<br />
+- `version`: `number` (optional, default `3`)  
     Version of the generated EPUB, `3` for the latest version (http://idpf.org/epub/30) or `2` for the previous version (http://idpf.org/epub/201)
-- `fetchTimeout`: `number` (optional, default `20000`)<br />
+- `fetchTimeout`: `number` (optional, default `20000`)  
     Timeout time for requests, in milliseconds; Browsers need to support `AbortController` and signals for this to work
-- `retryTimes`: `number` (optional, default `3`)<br />
+- `retryTimes`: `number` (optional, default `3`)  
     How many times to retry fetching resources
-- `batchSize`: `number` (optional, default `100`)<br />
+- `batchSize`: `number` (optional, default `100`)  
     The size of the batches to use when downloading files
-- `verbose`: `boolean` (optional, default `false`)<br />
-    Whether to log progress messages
+- `verbose`: `boolean | ((type, ...args) => void)` (optional, default `false`)  
+    Whether to log progress messages; If a function is provided, the first argument will either be `'log'` or `'warn'`
 
 
 ### Chapters
 
 **Within each chapter object:**
 
-- `title`: `string` (optional, default `Chapter [number]`)<br />
+- `title`: `string` (optional, default `Chapter [number]`)  
     Chapter title
-- `author`: `string | string[]` (optional)<br />
+- `author`: `string | string[]` (optional)  
     Chapter author, generates info below chapter title
-- `content`: `string`<br />
+- `content`: `string`  
     HTML String of the chapter content, image sources are downloaded
-- `excludeFromToc`: `boolean` (optional, default `false`)<br />
+- `excludeFromToc`: `boolean` (optional, default `false`)  
     Don't list chapter in Table of Contents
-- `beforeToc`: `boolean` (optional, default `false`)<br />
+- `beforeToc`: `boolean` (optional, default `false`)  
     List chapter before Table of Contents heading
-- `filename`: `string` (optional)<br />
+- `filename`: `string` (optional)  
     Custom name for chapter file
-- `url`: `string` (optional)<br />
+- `url`: `string` (optional)  
     External link below chapter title
 
 
@@ -161,9 +161,9 @@ protected:
 
 **Within each font object:**
 
-- `filename`: `string`<br />
+- `filename`: `string`  
     Name under which the font should be downloaded, including file extension
-- `url`: `string`<br />
+- `url`: `string`  
     URL where to find font, for best compatibility use `ttf` (TrueType) fonts
 
 
