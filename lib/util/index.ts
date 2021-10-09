@@ -19,7 +19,7 @@ export * from './other';
 export { Options, NormOptions, Content, Chapter, NormChapter, Font, optionsPredicate, chapterPredicate };
 
 
-export const optionsDefaults = (version = 3) => ({
+export const optionsDefaults = (version = 3): Omit<Options, 'title'> => ({
   description: '',
   author: ['anonymous'],
   publisher: 'anonymous',
@@ -39,6 +39,7 @@ export const optionsDefaults = (version = 3) => ({
   fetchTimeout: 20000,
   retryTimes: 3,
   batchSize: 100,
+  ignoreFailedDownloads: false,
   verbose: false,
 });
 

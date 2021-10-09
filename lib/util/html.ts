@@ -15,12 +15,12 @@ export type Image = {
 function imgSrc(this: EPub, url: string) {
   let image = this.images.find(i => i.url === url);
   if (!image) {
-    const mediaType = getType(url.replace(/\?.*/, ""));
+    const mediaType = getType(url.replace(/\?.*/, "")) || '';
     image = {
       url,
       mediaType,
       id: uuid(),
-      extension: getExtension(mediaType || ''),
+      extension: getExtension(mediaType) || '',
     };
     this.images.push(image);
   }

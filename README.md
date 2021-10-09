@@ -133,6 +133,8 @@ protected:
     How many times to retry fetching resources
 - `batchSize`: `number` (optional, default `100`)  
     The size of the batches to use when downloading files
+- `ignoreFailedDownloads`: `boolean` (optional, default `false`)  
+    Instead of throwing, emit a warning and write an empty file if a font or image fails to download
 - `verbose`: `boolean | ((type, ...args) => void)` (optional, default `false`)  
     Whether to log progress messages; If a function is provided, the first argument will either be `'log'` or `'warn'`
 

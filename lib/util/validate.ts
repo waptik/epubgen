@@ -41,6 +41,7 @@ export type Options = {
   fetchTimeout?: number,
   retryTimes?: number,
   batchSize?: number,
+  ignoreFailedDownloads?: boolean,
   verbose?: boolean | LogFn,
 };
 
@@ -86,6 +87,7 @@ export const optionsPredicate: ObjectPredicate<Options> = ow.object.partialShape
   fetchTimeout: ow.optional.number.positive,
   retryTimes: ow.optional.number.positive,
   batchSize: ow.optional.number.positive,
+  ignoreFailedDownloads: ow.optional.boolean,
   verbose: ow.optional.any(ow.boolean, ow.function as Predicate<LogFn>),
 });
 

@@ -118,9 +118,13 @@ export class EPub {
 
     for (let i = 0; i < this.options.fonts.length; i += this.options.batchSize) {
       const fontContents = await Promise.all(
-        this.options.fonts.slice(i, i + this.options.batchSize).map(font =>
-          retryFetch(font.url, this.options.fetchTimeout, this.options.retryTimes, this.log)
-            .then(res => (this.log(`Downloaded font ${font.url}`), { ...font, data: res })))
+        this.options.fonts.slice(i, i + this.options.batchSize).map(font => {
+          const d = retryFetch(font.url, this.options.fetchTimeout, this.options.retryTimes, this.log)
+            .then(res => (this.log(`Downloaded font ${font.url}`), { ...font, data: res }));
+          return this.options.ignoreFailedDownloads
+            ? d.catch(reason => (this.warn(`Warning (font ${font.url}): Download failed`, reason), { ...font, data: '' }))
+            : d;
+        })
       );
       fontContents.forEach(font => fonts.file(font.filename, font.data));
     }
@@ -133,10 +137,13 @@ export class EPub {
 
     for (let i = 0; i < this.images.length; i += this.options.batchSize) {
       const imageContents = await Promise.all(
-        this.images.slice(i, i + this.options.batchSize).map(image =>
-          retryFetch(image.url, this.options.fetchTimeout, this.options.retryTimes, this.log)
-            .then(res => (this.log(`Downloaded image ${image.url}`), { ...image, data: res }))
-        )
+        this.images.slice(i, i + this.options.batchSize).map(image => {
+          const d = retryFetch(image.url, this.options.fetchTimeout, this.options.retryTimes, this.log)
+            .then(res => (this.log(`Downloaded image ${image.url}`), { ...image, data: res }));
+          return this.options.ignoreFailedDownloads
+            ? d.catch(reason => (this.warn(`Warning (image ${image.url}): Download failed`, reason), { ...image, data: '' }))
+            : d;
+        })
       );
       imageContents.forEach(image => images.file(`${image.id}.${image.extension}`, image.data));
     }
@@ -145,7 +152,8 @@ export class EPub {
   protected async makeCover() {
     if (!this.cover) return this.log('No cover to download');
     const oebps = this.zip.folder('OEBPS')!;
-    const coverContent = await retryFetch(this.options.cover, this.options.fetchTimeout, this.options.retryTimes, this.log);
+    const coverContent = await retryFetch(this.options.cover, this.options.fetchTimeout, this.options.retryTimes, this.log)
+      .catch(reason => (this.warn(`Warning (cover ${this.options.cover}): Download failed`, reason), ''));
     oebps.file(`cover.${this.cover.extension}`, coverContent);
   }
 }
