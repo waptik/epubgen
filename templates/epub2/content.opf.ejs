@@ -13,7 +13,9 @@
         <dc:creator opf:role="aut" opf:file-as="<%= author.join(",")  %>"><%= author.join(",") %></dc:creator>
         <dc:date opf:event="modification"><%= date %></dc:date>
         <dc:language><%= lang %></dc:language>
+        <% if(cover) { %>
         <meta name="cover" content="image_cover" />
+        <% } %>
         <meta name="generator" content="epub-gen" />
 
     </metadata>

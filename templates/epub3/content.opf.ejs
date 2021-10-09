@@ -27,7 +27,9 @@
         <dc:date><%= date %></dc:date>
         <meta property="dcterms:rights">All rights reserved</meta>
         <dc:rights>Copyright &#x00A9; <%= (new Date()).getFullYear() %> by <%= publisher %></dc:rights>
+        <% if(cover) { %>
         <meta name="cover" content="image_cover"/>
+        <% } %>
         <meta name="generator" content="epub-gen" />
         <meta property="ibooks:specified-fonts">true</meta>
 
