@@ -1,4 +1,8 @@
-# epub-gen-memory --- a library to make EPUBs from HTML
+# epubgen --- a library to make EPUBs from HTML
+
+This is a fork of https://github.com/cpiber/epub-gen-memory and an attempt to `denoify` the package.
+
+------
 
 Generate EPUB books from HTML with a simple API in Node.js or the browser.
 
@@ -18,13 +22,13 @@ On the server (with Node.js), image paths can also start with `file://`, in whic
 Install the lib and add it as a dependency (recommended), run in your project directory:
 
 ```shell
-npm install epub-gen-memory --save
+npm install epubgen --save
 ```
 
 Then put this in your code:
 
 ```js
-import epub from 'epub-gen-memory';
+import epub from 'epubgen';
 
 epub(options).then(
     content => console.log("Ebook Generated Successfully!"),
@@ -34,30 +38,30 @@ epub(options).then(
 
 See [JSZip documentation](https://github.com/Stuk/jszip/blob/master/documentation/howto/write_zip.md) on how to get the zip to the user. For a nodejs example please see the tests.
 
-In environments where `SharedArrayBuffer` is not available, you might want to instead import from `epub-gen-memory/sabstub`, which includes a non-functional stub:
+In environments where `SharedArrayBuffer` is not available, you might want to instead import from `epubgen/sabstub`, which includes a non-functional stub:
 
 ```js
-import epub from 'epub-gen-memory/sabstub';
+import epub from 'epubgen/sabstub';
 ```
 
-The package also includes a [browserify](https://www.npmjs.com/package/browserify)d bundle (UMD) as `epub-gen-memory/bundle`. It is possible to use the bundle if you want to build for the browser. The bundle is also available from a CDN: [UNPKG](https://unpkg.com/epub-gen-memory) ([latest](https://unpkg.com/epub-gen-memory), [latest 1.x](https://unpkg.com/epub-gen-memory@^1.0.0)). The bundle also includes the proper return type for the browser (`Promise<Blob>` instead of `Promise<Buffer>`).
+The package also includes a [browserify](https://www.npmjs.com/package/browserify)d bundle (UMD) as `epubgen/bundle`. It is possible to use the bundle if you want to build for the browser. The bundle is also available from a CDN: [UNPKG](https://unpkg.com/epubgen) ([latest](https://unpkg.com/epubgen), [latest 1.x](https://unpkg.com/epubgen@^1.0.0)). The bundle also includes the proper return type for the browser (`Promise<Blob>` instead of `Promise<Buffer>`).
 
 ```js
-import epub from 'epub-gen-memory/bundle';
+import epub from 'epubgen/bundle';
 ```
 
 **Note**: This library was written in TypeScript and thus uses ESM exports, but it was compiled to CommonJS, so you can also use the following:
 
 ```js
-const epub = require('epub-gen-memory').default;
+const epub = require('epubgen').default;
 ```
 
 
 ## API
 
 ```ts
-import epub, { EPub, optionsDefaults, chapterDefaults } from 'epub-gen-memory';
-import type { Options, Content, Chapter, Font } from 'epub-gen-memory';
+import epub, { EPub, optionsDefaults, chapterDefaults } from 'epubgen';
+import type { Options, Content, Chapter, Font } from 'epubgen';
 ```
 
 

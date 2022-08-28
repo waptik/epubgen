@@ -1,6 +1,6 @@
 {
-  "name": "epub-gen-memory",
-  "version": "1.0.9",
+  "name": "epubgen",
+  "version": "1.0.0",
   "description": "A library to generate EPUB from HTML",
   "main": "dist/lib/index.js",
   "unpkg": "dist/bundle.min.js",
@@ -25,7 +25,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/cpiber/epub-gen-memory.git"
+    "url": "https://github.com/waptik/epubgen.git"
   },
   "keywords": [
     "epub",
@@ -34,12 +34,12 @@
     "html",
     "epub-generator"
   ],
-  "author": "cpiber",
+  "author": "waptik",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cpiber/epub-gen-memory/issues"
+    "url": "https://github.com/waptik/epubgen/issues"
   },
-  "homepage": "https://github.com/cpiber/epub-gen-memory",
+  "homepage": "https://github.com/waptik/epubgen",
   "dependencies": {
     "abort-controller": "^3.0.0",
     "css-select": "^4.1.3",
