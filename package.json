@@ -3,25 +3,21 @@
   "version": "1.0.0",
   "description": "A library to generate EPUB from HTML",
   "main": "dist/lib/index.js",
-  "unpkg": "dist/bundle.min.js",
   "types": "dist/lib/index.d.ts",
-  "browser": {
-    "./dist/lib/util/fetchable.js": "./dist/lib/util/fetchable-browser.js",
-    "./dist/lib/util/html-parse.js": "./dist/lib/util/html-parse-browser.js"
-  },
+  "type": "module",
   "files": [
-    "dist/",
-    "bundle/",
-    "sabstub/"
+    "dist/"
   ],
   "scripts": {
-    "prebuild": "node scripts/templates.js",
-    "build": "tsc --inlineSourceMap false --inlineSources false && tsc-alias",
-    "bundle": "browserify --debug -e ./dist/lib/SharedArrayBufferStub.js -e ./dist/lib/index.js -s epub-gen -o dist/bundle.js && terser --mangle --compress --comments false -o dist/bundle.min.js -- dist/bundle.js",
+    "prebuild": "pnpm clean && node scripts/templates.cjs",
+    "build": "tsc --inlineSourceMap false --inlineSources false && tsc-alias && denoify",
+    "denoify": "rimraf deno_dist && denoify",
     "dev": "node scripts/templates.js -w & tsc -w & tsc-alias -w",
-    "test": "node -r source-map-support/register --trace-uncaught --unhandled-rejections=strict scripts/runner.js",
-    "clean": "rimraf dist lib/templates .tsbuildinfo",
-    "prepack": "npm run clean && npm run build && npm run bundle && echo tests > dist/.npmignore && echo bundle.js >> dist/.npmignore"
+    "test": "node -r source-map-support/register --trace-uncaught --unhandled-rejections=strict scripts/runner.cjs",
+    "clean": "rimraf dist lib/templates .tsbuildinfo deno_dist",
+    "prepack": "pnpm clean && pnpm build && echo tests > dist/.npmignore",
+    "prerelease": "pnpm build && pnpm denoify && pnpm test",
+    "release": "pnpm publish"
   },
   "repository": {
     "type": "git",
@@ -65,6 +61,7 @@
     "browserify": "^17.0.0",
     "chalk": "^4.1.2",
     "chokidar": "^3.5.2",
+    "denoify": "^1.0.2",
     "dree": "^2.8.3",
     "rimraf": "^3.0.2",
     "source-map-support": "^0.5.20",
