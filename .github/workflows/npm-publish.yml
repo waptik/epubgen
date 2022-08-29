@@ -41,10 +41,11 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install
-        run: pnpm build
-        run: pnpm prepack
+        run: |
+          pnpm install
+          pnpm build
+          pnpm prepack
 
-      - run: npm publish
+      - run: pnpm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
