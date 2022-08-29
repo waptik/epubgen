@@ -87,8 +87,6 @@ jobs:
       - name: Install dependencies
         run: |
           pnpm install
-          pnpm prepack
-          ls -l dist
 
       - name: Publish to npm
         run: |
@@ -100,7 +98,8 @@ jobs:
             echo "Can't publish on NPM, You must first create a secret called NPM_TOKEN that contains your NPM auth token. https://help.github.com/en/actions/automating-your-workflow-with-github-actions/creating-and-using-encrypted-secrets"
             false
           fi
-          pnpm publish --access public
+          pnpm release
+
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
           VERSION: ${{ needs.check_if_version_upgraded.outputs.to_version }}
