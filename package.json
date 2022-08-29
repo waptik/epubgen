@@ -6,11 +6,12 @@
   "types": "dist/lib/index.d.ts",
   "type": "module",
   "files": [
-    "dist/"
+    "dist/lib/index.js",
+    "dist/lib/index.d.ts"
   ],
   "scripts": {
     "prebuild": "pnpm clean && node scripts/templates.cjs",
-    "build": "tsc --inlineSourceMap false --inlineSources false && tsc-alias && denoify",
+    "build": "tsc --inlineSourceMap false --inlineSources false && tsc-alias",
     "denoify": "rimraf deno_dist && denoify",
     "dev": "node scripts/templates.js -w & tsc -w & tsc-alias -w",
     "test": "node -r source-map-support/register --trace-uncaught --unhandled-rejections=strict scripts/runner.cjs",
