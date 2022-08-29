@@ -17,8 +17,7 @@ jobs:
           node-version: 16.x
           registry-url: https://registry.npmjs.org
 
-      - uses:
-        name: Install pnpm
+      - name: Install pnpm
         id: pnpm-install
         with:
           version: 7
