@@ -1,17 +1,16 @@
 {
   "name": "@waptik/epubgen",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A library to generate EPUB from HTML",
   "main": "dist/lib/index.js",
   "types": "dist/lib/index.d.ts",
   "type": "module",
   "files": [
-    "dist/lib/index.js",
-    "dist/lib/index.d.ts"
+    "dist/"
   ],
   "scripts": {
     "prebuild": "pnpm clean && node scripts/templates.cjs",
-    "build": "tsc --inlineSourceMap false --inlineSources false && tsc-alias",
+    "build": "tsc && tsc-alias",
     "denoify": "rimraf deno_dist && denoify",
     "dev": "node scripts/templates.js -w & tsc -w & tsc-alias -w",
     "test": "node -r source-map-support/register --trace-uncaught --unhandled-rejections=strict scripts/runner.cjs",
@@ -62,7 +61,7 @@
     "browserify": "^17.0.0",
     "chalk": "^4.1.2",
     "chokidar": "^3.5.2",
-    "denoify": "1.0.3",
+    "denoify": "^1.0.3",
     "dree": "^2.8.3",
     "rimraf": "^3.0.2",
     "source-map-support": "^0.5.20",
