@@ -12,7 +12,7 @@ specifiers:
   chalk: ^4.1.2
   chokidar: ^3.5.2
   css-select: ^4.1.3
-  denoify: 0.11.0
+  denoify: 1.0.3
   diacritics: ^1.3.0
   dom-serializer: ^1.3.2
   domhandler: ^4.2.2
@@ -57,7 +57,7 @@ devDependencies:
   browserify: 17.0.0
   chalk: 4.1.2
   chokidar: 3.5.2
-  denoify: 0.11.0
+  denoify: 1.0.3
   dree: 2.8.3
   rimraf: 3.0.2
   source-map-support: 0.5.20
@@ -796,22 +796,22 @@ packages:
     engines: {node: '>=0.4.0'}
     dev: true
 
-  /denoify/0.11.0:
-    resolution: {integrity: sha512-0otRN/cDzjYLWWOHvmMFKt8vOv1WJMgThILU20hOZrXKXCKkPN/ZGwC45raDre1ersL/+XBNVuPYJJiH+khBgg==}
+  /denoify/1.0.3:
+    resolution: {integrity: sha512-SBu+6jOilxuHEFbd0/DcaBdkgwslx5XV94lOIsys2sMSfPgalU+/y+Oy7WUPonwOekqCbQEh05D+vH9UJopg6w==}
     hasBin: true
     dependencies:
       '@octokit/rest': 18.12.0
       '@types/comment-json': 1.1.1
       commander: 4.1.1
       comment-json: 3.0.3
-      evt: 2.0.0-beta.45
+      evt: 2.4.0
       get-github-default-branch-name: 0.0.4
       gitignore-parser: 0.0.2
       glob: 7.1.7
-      node-fetch: 2.6.4
+      node-fetch: 2.6.7
       path-depth: 1.0.0
       scripting-tools: 0.19.13
-      tsafe: 0.8.1
+      tsafe: 1.0.1
       url-join: 4.0.1
     transitivePeerDependencies:
       - encoding
@@ -1023,12 +1023,12 @@ packages:
       safe-buffer: 5.2.1
     dev: true
 
-  /evt/2.0.0-beta.45:
-    resolution: {integrity: sha512-Me2/YMCjxLgz4y0aWKIxykyJth2LHKqxc91XnsIN39IRksknObBR9Pjmxwpnhmd1lNCR6mPFv/vBt46iQWtI9g==}
+  /evt/2.4.0:
+    resolution: {integrity: sha512-1V8FnExwqzX2fufT793mHfCnQay078kRdAEDHzJz863pgJK9aeDiWXZFs5aKmzJfIgi+svevtApVnleZXz4Jeg==}
     dependencies:
       minimal-polyfills: 2.2.2
       run-exclusive: 2.2.16
-      tsafe: 0.4.1
+      tsafe: 1.0.1
     dev: true
 
   /expand-tilde/2.0.2:
@@ -1666,6 +1666,7 @@ packages:
     engines: {node: 4.x || >=6.0.0}
     dependencies:
       whatwg-url: 5.0.0
+    dev: false
 
   /node-fetch/2.6.7:
     resolution: {integrity: sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==}
@@ -2184,12 +2185,8 @@ packages:
   /tr46/0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
 
-  /tsafe/0.4.1:
-    resolution: {integrity: sha512-+OZ0gdgmwcru+MOSheCx+ymAvQz+1/ui+KFJRuaq0t2m8RNrlf7eSzEieptoPQXPY67Mdkqgkdjknn8azoD5sw==}
-    dev: true
-
-  /tsafe/0.8.1:
-    resolution: {integrity: sha512-EfPjxQHzndQAV/uh0SMGP26Wg3dCuaw8dRv2VPEuGHen5qzg2oqsMvZw2wkQFkiMisZq2fm95m5lheimW2Fpvg==}
+  /tsafe/1.0.1:
+    resolution: {integrity: sha512-FgJ1a4rE7YbmW5QIzpsfFl4tsAp0x74FH2bVE6qODb2U8jSrwTr5/ckIazeylme5zXndVbtgKm4BZdqmoGhiPw==}
     dev: true
 
   /tsc-alias/1.3.9:
