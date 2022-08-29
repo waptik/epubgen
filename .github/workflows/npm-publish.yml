@@ -8,8 +8,8 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: PNPM Setup
-      - uses: ./pnpm.yml
+      - uses: ./.github/workflows/pnpm.yml
+        name: PNPM Setup
 
       - name: Publish to npm
         run: pnpm publish
