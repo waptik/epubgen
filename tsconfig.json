@@ -1,32 +1,44 @@
 {
   "compilerOptions": {
     /* Projects */
-    "incremental": true,                                 /* Enable incremental compilation */
-    "composite": true,                                   /* Enable constraints that allow a TypeScript project to be used with project references. */
-    "tsBuildInfoFile": "./.tsbuildinfo", 
-    "module": "ES2020",                                /* Specify what module code is generated. */
-    "moduleResolution": "node",                          /* Specify how TypeScript looks up a file from a given module specifier. */
-    "baseUrl": ".",                                     /* Specify the base directory to resolve non-relative module names. */
-    "paths": {                                           /* Specify a set of entries that re-map imports to additional lookup locations. */
-      "templates/*": ["lib/templates/*"]
+    "incremental": true, /* Enable incremental compilation */
+    "composite": true, /* Enable constraints that allow a TypeScript project to be used with project references. */
+    "tsBuildInfoFile": "./.tsbuildinfo",
+    "module": "ES2020", /* Specify what module code is generated. */
+    "moduleResolution": "node", /* Specify how TypeScript looks up a file from a given module specifier. */
+    "baseUrl": ".", /* Specify the base directory to resolve non-relative module names. */
+    "paths": { /* Specify a set of entries that re-map imports to additional lookup locations. */
+      "templates/*": [
+        "lib/templates/*"
+      ]
     },
     // "rootDirs": [],                                   /* Allow multiple folders to be treated as one when resolving modules. */
-    "typeRoots": ["node_modules/@types", "lib/types"],      /* Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output. */
-    "outDir": "./dist",                                 /* Specify the location where debugger should locate map files instead of generated locations. */
-    "inlineSourceMap": true,                             /* Include sourcemap files inside the emitted JavaScript. */
-    "inlineSources": true,                 /* Allow 'import x from y' when a module doesn't have a default export. */
-    "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */
+    "typeRoots": [
+      "node_modules/@types",
+      "lib/types"
+    ], /* Specify a file that bundles all outputs into one JavaScript file. If `declaration` is true, also designates a file that bundles all .d.ts output. */
+    "outDir": "./dist", /* Specify the location where debugger should locate map files instead of generated locations. */
+    "inlineSourceMap": true, /* Include sourcemap files inside the emitted JavaScript. */
+    "inlineSources": true, /* Allow 'import x from y' when a module doesn't have a default export. */
+    "esModuleInterop": true, /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */
     // "preserveSymlinks": true,                         /* Disable resolving symlinks to their realpath. This correlates to the same flag in node. */
-    "forceConsistentCasingInFileNames": true,            /* Ensure that casing is correct in imports. */
-
+    "forceConsistentCasingInFileNames": true, /* Ensure that casing is correct in imports. */
     /* Type Checking */
-    "strict": true,                                      /* Enable all strict type-checking options. */
+    "strict": true, /* Enable all strict type-checking options. */
     // "noImplicitAny": true,                            /* Enable error reporting for expressions and declarations with an implied `any` type.. */
     // "strictNullChecks": true,                         /* When type checking, take into account `null` and `undefined`. */
-    "strictFunctionTypes": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
-    "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
+    "strictFunctionTypes": true, /* Skip type checking .d.ts files that are included with TypeScript. */
+    "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "include": [
     "lib/",
+  ],
+  "exclude": [
+    "node_modules",
+    "dist/",
+    "deno_dist/",
+    "src/**/*.deno.ts",
+    "src/**/*.deno.tsx",
+    "res/"
   ]
 }
