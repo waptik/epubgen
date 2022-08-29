@@ -1,6 +1,6 @@
 on:
-  - push
-  - pull_request
+  release:
+    types: [created]
 
 jobs:
   cache-and-install:
@@ -40,3 +40,8 @@ jobs:
         run: |
           pnpm install
           pnpm build
+
+      - name: Publish to npm
+        run: pnpm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
