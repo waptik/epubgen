@@ -1,6 +1,6 @@
 {
   "name": "@waptik/epubgen",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A library to generate EPUB from HTML",
   "main": "dist/lib/index.js",
   "types": "dist/lib/index.d.ts",
