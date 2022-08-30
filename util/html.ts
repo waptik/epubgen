@@ -1,6 +1,7 @@
-import type { EPub } from "../epuby.ts";
+import { mime } from "../deps.ts";
+import type { EPub } from "../epub.ts";
 import { fixHTML } from "./html-parse.ts";
-import { mime, uuid } from "./other.ts";
+import { uuid } from "./other.ts";
 
 export type CB = typeof imgSrc;
 

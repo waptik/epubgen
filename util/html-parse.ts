@@ -1,9 +1,15 @@
 import { compile, selectAll, selectOne } from "https://esm.sh/css-select@5.1.0";
-import render from "htmlparser/DomSerializer.ts";
-import { Element, Node } from "htmlparser/Node.ts";
-import { DomUtils, parseDocument } from "htmlparser/mod.ts";
+import render from "https://deno.land/x/html_parser@v0.1.3/src/DomSerializer.ts";
+import {
+  Element,
+  Node,
+} from "https://deno.land/x/html_parser@v0.1.3/src/Node.ts";
+import {
+  DomUtils,
+  parseDocument,
+} from "https://deno.land/x/html_parser@v0.1.3/src/mod.ts";
 
-import type { EPub } from "../epuby.ts";
+import type { EPub } from "../epub.ts";
 import { allowedAttributes, allowedXhtml11Tags } from "./constants.ts";
 import type { CB } from "./html.ts";
 

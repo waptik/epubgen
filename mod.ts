@@ -1,15 +1,7 @@
-import ow from "ow";
+import { ow } from "./deps.ts";
 import { Content, Options, optionsPredicate } from "./util/validate.ts";
 
 import { EPub } from "./epub.ts";
-
-// jzip.file()
-// zip.addFile("Hello.txt", "Hello World\n");
-
-// const img = zip.folder("images");
-// img.addFile("smile.gif", "\0", { base64: true });
-
-// await zip.writeZip("example.zip");
 
 const epub = (
   optionsOrTitle: Options | string,

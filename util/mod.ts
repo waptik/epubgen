@@ -1,17 +1,18 @@
-import ow from "ow";
 import uslug from "https://esm.sh/uslug@1.0.4";
 
-import chapterXHTML2 from "templates/epub2/chapter.xhtml.ejs.ts";
-import contentOPF2 from "templates/epub2/content.opf.ejs.ts";
-import tocXHTML2 from "templates/epub2/toc.xhtml.ejs.ts";
-import chapterXHTML3 from "templates/epub3/chapter.xhtml.ejs.ts";
-import contentOPF3 from "templates/epub3/content.opf.ejs.ts";
-import tocXHTML3 from "templates/epub3/toc.xhtml.ejs.ts";
-import css from "templates/template.css.ts";
-import tocNCX from "templates/toc.ncx.ejs.ts";
-import { EPub } from "../epuby.ts";
+import chapterXHTML2 from "../templates/epub2/chapter.xhtml.ejs.ts";
+import contentOPF2 from "../templates/epub2/content.opf.ejs.ts";
+import tocXHTML2 from "../templates/epub2/toc.xhtml.ejs.ts";
+import chapterXHTML3 from "../templates/epub3/chapter.xhtml.ejs.ts";
+import contentOPF3 from "../templates/epub3/content.opf.ejs.ts";
+import tocXHTML3 from "../templates/epub3/toc.xhtml.ejs.ts";
+import css from "../templates/template.css.ts";
+import tocNCX from "../templates/toc.ncx.ejs.ts";
+
+import { mime, ow } from "../deps.ts";
+import { EPub } from "../epub.ts";
 import { normalizeHTML } from "./html.ts";
-import { mime, removeDiacritics } from "./other.ts";
+import { removeDiacritics } from "./other.ts";
 
 import {
   Chapter,

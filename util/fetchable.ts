@@ -1,5 +1,3 @@
-// import * as fs from 'fs/promises';
-
 export const type = "arraybuffer";
 
 const fetchable = async (url: string, timeout: number) => {

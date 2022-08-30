@@ -1,12 +1,7 @@
-import { mime } from "https://deno.land/x/mimetypes@v1.0.0/mod.ts";
-import fetchable from "./fetchable.ts";
-
-export { normalizeSync as removeDiacritics } from "diacritics";
-export { renderToString as renderTemplate } from "ejs";
+export { normalizeSync as removeDiacritics } from "../deps.ts";
 
 export * from "./fetchable.ts";
-
-export { mime };
+import fetchable from "./fetchable.ts";
 
 export const uuid = () =>
   "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"

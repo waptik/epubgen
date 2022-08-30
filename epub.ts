@@ -1,8 +1,12 @@
-import { JSZip } from "dezip";
-import { JSZipGeneratorOptions } from "dezip/types";
+import {
+  JSZip,
+  type JSZipGeneratorOptions,
+  mime,
+  renderTemplate,
+} from "./deps.ts";
 
 import { Image } from "./util/html.ts";
-import { mime, renderTemplate, retryFetch, uuid } from "./util/other.ts";
+import { retryFetch, uuid } from "./util/other.ts";
 import { Content, NormChapter, NormOptions, Options } from "./util/validate.ts";
 import {
   validateAndNormalizeChapters,

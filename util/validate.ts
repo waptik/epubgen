@@ -1,5 +1,9 @@
-import ow, { ObjectPredicate, Predicate } from "https://esm.sh/ow@1.0.0";
-import { Merge } from "https://deno.land/x/typefest@0.16.0/mod.ts";
+import {
+  type Merge,
+  type ObjectPredicate,
+  ow,
+  type Predicate,
+} from "../deps.ts";
 
 export type Chapter = {
   title?: string;
