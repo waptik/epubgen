@@ -13,9 +13,6 @@ const content = `
     <% if (author.length) { %>
       <p class="epub-author"><%= author.join(', ') %></p>
     <% } %>
-    <% if (url) { %>
-      <p class="epub-link"><a href="<%= url %>"><%= url %></a></p>
-    <% } %>
   <% } %>
   <%- content %>
 </body>
