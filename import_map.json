@@ -1,0 +1,13 @@
+{
+  "imports": {
+    "templates/": "./templates/",
+
+    "ejs": "https://deno.land/x/dejs@0.10.3/mod.ts",
+    "ow": "https://esm.sh/ow@1.0.0",
+    "htmlparser/": "https://deno.land/x/html_parser@v0.1.3/src/",
+    "dezip": "https://deno.land/x/zippy@0.1.0/mod.ts",
+    "dezip/types": "https://deno.land/x/zippy@0.1.0/types.ts",
+    "diacritics": "https://deno.land/x/normalize_diacritics@v0.10.0/mod.ts",
+    "$std/": "https://deno.land/std@0.152.0/"
+  }
+}
