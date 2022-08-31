@@ -63,8 +63,6 @@ export class EPub {
         this.cover = { mediaType, extension };
       }
     }
-
-    console.log({ template });
   }
 
   async render() {
@@ -138,24 +136,6 @@ export class EPub {
       content: this.content,
     };
 
-    // const rendered = await renderToString(chapterXHTML, opt);
-    // console.log("contentOPF", { rendered });
-
-    this.log("Generating content for content.opf...", opt.content);
-
-    // const data = await renderFileToString(
-    //   path.join(template.path, "toc.ncx.ejs"),
-    //   opt,
-    // );
-    // oebps.addFile("toc.ncx", data);
-    // this.log("saved content.opf to oebps", data);
-
-    // const render = {
-    //   contentOPF: await renderToString(contentOPF, opt),
-    //   tocNCX: await renderToString(tocNCX, opt),
-    //   tocXHTML: await renderToString(tocXHTML, opt),
-    // };
-
     const renderedFiles = {
       contentOPF: await renderFileToString(
         path.join(template.path, "content.opf.ejs"),
@@ -170,8 +150,6 @@ export class EPub {
         opt,
       ),
     };
-
-    console.log("rendered remplates", { renderedFiles });
 
     oebps.addFile(
       "content.opf",
@@ -257,13 +235,10 @@ export class EPub {
             : d;
         }),
       );
-      this.log(`Downloaded ${imageContents.length} images`, { imageContents });
       imageContents.forEach((image) =>
         images.addFile(`${image.id}.${image.extension}`, image.data)
       );
     }
-
-    this.log("Downloaded all images", { images: this.images });
   }
 
   protected async makeCover() {
