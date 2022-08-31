@@ -99,7 +99,7 @@ export class EPub {
   protected async generateTemplateFiles() {
     const oebps = this.zip.folder("OEBPS")!;
     const css = Deno.readFileSync(
-      path.join(template.path, "template.css"),
+      path.resolve(path.join(template.path, "template.css")),
     );
     oebps.addFile("style.css", css);
 
