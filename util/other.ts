@@ -37,6 +37,8 @@ export async function fetchFileContent(file: string) {
   const url = new URL(file, import.meta.url);
   const response = await fetch(url);
   const data = await response.text();
+  console.log("fetchFileContent", { data });
+
   return data;
 }
 
