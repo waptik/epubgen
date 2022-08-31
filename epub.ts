@@ -98,15 +98,13 @@ export class EPub {
 
   protected async generateTemplateFiles() {
     const oebps = this.zip.folder("OEBPS")!;
-    const css = await fetchFileContent(
-      path.join(template.path, "template.css"),
-    );
+    const css = await fetchFileContent("template.css");
 
     oebps.addFile("style.css", css);
 
     this.content.forEach(async (chapter) => {
       const rendered = await dejs.renderToString(
-        await fetchFileContent(path.join(template.path, "chapter.xhtml.ejs")),
+        await fetchFileContent("chapter.xhtml.ejs"),
         {
           lang: this.options.lang,
           prependChapterTitles: this.options.prependChapterTitles,
@@ -133,15 +131,15 @@ export class EPub {
 
     const renderedFiles = {
       contentOPF: await dejs.renderToString(
-        await fetchFileContent(path.join(template.path, "content.opf.ejs")),
+        await fetchFileContent("content.opf.ejs"),
         opt,
       ),
       tocNCX: await dejs.renderToString(
-        await fetchFileContent(path.join(template.path, "toc.ncx.ejs")),
+        await fetchFileContent("toc.ncx.ejs"),
         opt,
       ),
       tocXHTML: await dejs.renderToString(
-        await fetchFileContent(path.join(template.path, "toc.xhtml.ejs")),
+        await fetchFileContent("toc.xhtml.ejs"),
         opt,
       ),
     };
