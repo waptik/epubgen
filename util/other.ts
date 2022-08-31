@@ -39,3 +39,7 @@ export async function fetchLocalFile(file: string) {
   const data = await response.text();
   return data;
 }
+
+export function pathToUrl(path: string) {
+  return new URL(path, import.meta.url).href;
+}

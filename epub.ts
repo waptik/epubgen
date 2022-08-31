@@ -1,7 +1,7 @@
 import { dejs, JSZip, type JSZipGeneratorOptions, mime, path } from "./deps.ts";
 
 import { Image } from "./util/html.ts";
-import { fetchLocalFile, retryFetch, uuid } from "./util/other.ts";
+import { fetchLocalFile, pathToUrl, retryFetch, uuid } from "./util/other.ts";
 import { Content, NormChapter, NormOptions, Options } from "./util/validate.ts";
 import {
   validateAndNormalizeChapters,
@@ -106,7 +106,7 @@ export class EPub {
 
     this.content.forEach(async (chapter) => {
       const rendered = await dejs.renderFileToString(
-        path.join(template.path, "chapter.xhtml.ejs"),
+        pathToUrl(path.join(template.path, "chapter.xhtml.ejs")),
         {
           lang: this.options.lang,
           prependChapterTitles: this.options.prependChapterTitles,
@@ -133,15 +133,15 @@ export class EPub {
 
     const renderedFiles = {
       contentOPF: await dejs.renderFileToString(
-        path.join(template.path, "content.opf.ejs"),
+        pathToUrl(path.join(template.path, "content.opf.ejs")),
         opt,
       ),
       tocNCX: await dejs.renderFileToString(
-        path.join(template.path, "toc.ncx.ejs"),
+        pathToUrl(path.join(template.path, "toc.ncx.ejs")),
         opt,
       ),
       tocXHTML: await dejs.renderFileToString(
-        path.join(template.path, "toc.xhtml.ejs"),
+        pathToUrl(path.join(template.path, "toc.xhtml.ejs")),
         opt,
       ),
     };
