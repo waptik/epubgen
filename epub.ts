@@ -144,8 +144,6 @@ export class EPub {
       ),
     };
 
-    console.log({ renderedFiles });
-
     oebps.addFile(
       "content.opf",
       renderedFiles.contentOPF,
