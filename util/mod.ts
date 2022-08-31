@@ -1,14 +1,5 @@
 import uslug from "https://esm.sh/uslug@1.0.4";
 
-import chapterXHTML2 from "../templates/epub2/chapter.xhtml.ejs.ts";
-import contentOPF2 from "../templates/epub2/content.opf.ejs.ts";
-import tocXHTML2 from "../templates/epub2/toc.xhtml.ejs.ts";
-import chapterXHTML3 from "../templates/epub3/chapter.xhtml.ejs.ts";
-import contentOPF3 from "../templates/epub3/content.opf.ejs.ts";
-import tocXHTML3 from "../templates/epub3/toc.xhtml.ejs.ts";
-import css from "../templates/template.css.ts";
-import tocNCX from "../templates/toc.ncx.ejs.ts";
-
 import { mime, ow } from "../deps.ts";
 import { EPub } from "../epub.ts";
 import { normalizeHTML } from "./html.ts";
@@ -31,8 +22,8 @@ export * from "./other.ts";
 export { chapterPredicate, optionsPredicate };
 export type { Chapter, Content, Font, NormChapter, NormOptions, Options };
 
-export const optionsDefaults = (version = 3): Omit<Options, "title"> => ({
-  description: "",
+export const optionsDefaults = (): Omit<Options, "title"> => ({
+  description: "no description",
   author: ["anonymous"],
   publisher: "anonymous",
   tocTitle: "Table of Contents",
@@ -41,13 +32,7 @@ export const optionsDefaults = (version = 3): Omit<Options, "title"> => ({
   prependChapterTitles: true,
   date: new Date().toISOString(),
   lang: "en",
-  css,
-  chapterXHTML: version === 2 ? chapterXHTML2 : chapterXHTML3,
-  contentOPF: version === 2 ? contentOPF2 : contentOPF3,
-  tocNCX,
-  tocXHTML: version === 2 ? tocXHTML2 : tocXHTML3,
   fonts: [],
-  version,
   fetchTimeout: 20000,
   retryTimes: 3,
   batchSize: 100,
@@ -71,7 +56,7 @@ export const validateAndNormalizeOptions = (options: Options) => {
 
   // put defaults
   const opt = {
-    ...optionsDefaults(options.version || 3),
+    ...optionsDefaults(),
     ...options,
   } as NormOptions;
   opt.author = normName(opt.author);

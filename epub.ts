@@ -1,9 +1,4 @@
-import {
-  JSZip,
-  type JSZipGeneratorOptions,
-  mime,
-  renderTemplate,
-} from "./deps.ts";
+import { dejs, JSZip, type JSZipGeneratorOptions, mime, path } from "./deps.ts";
 
 import { Image } from "./util/html.ts";
 import { retryFetch, uuid } from "./util/other.ts";
@@ -13,12 +8,20 @@ import {
   validateAndNormalizeOptions,
 } from "./util/mod.ts";
 
+const template = {
+  path: path.resolve(path.join(Deno.cwd(), "templates")).toString(),
+  ejs: {
+    rmWhitespace: true,
+  },
+};
+
 export class EPub {
   protected options: NormOptions;
   protected content: NormChapter[];
   protected uuid: string;
   protected images: Image[] = [];
   protected cover?: { extension: string; mediaType: string };
+  protected title: string;
 
   protected log: typeof console.log;
   protected warn: typeof console.warn;
@@ -41,6 +44,7 @@ export class EPub {
     }
     this.uuid = uuid();
     this.content = validateAndNormalizeChapters.call(this, content);
+    this.title = this.options.title;
     this.zip = new JSZip();
     this.zip.addFile("mimetype", "application/epub+zip", {
       compression: "STORE",
@@ -68,10 +72,16 @@ export class EPub {
     return this;
   }
 
+  async save() {
+    // const content = await this.genEpub();
+    // this.zip.g
+    // Deno.writeFileSync(this.options.output, content);
+  }
+
   async genEpub() {
     await this.render();
     const content = this.zip.generateAsync({
-      type: "arraybuffer",
+      type: "uint8array",
       mimeType: "application/epub+zip",
       compression: "DEFLATE",
       compressionOptions: {
@@ -88,15 +98,22 @@ export class EPub {
 
   protected async generateTemplateFiles() {
     const oebps = this.zip.folder("OEBPS")!;
-    oebps.addFile("style.css", this.options.css);
+    const css = Deno.readFileSync(
+      path.join(template.path, "template.css"),
+    );
+    oebps.addFile("style.css", css);
 
     this.content.forEach(async (chapter) => {
-      const rendered = await renderTemplate(this.options.chapterXHTML, {
-        lang: this.options.lang,
-        prependChapterTitles: this.options.prependChapterTitles,
-        ...chapter,
-      });
-      oebps.addFile(chapter.filename, rendered);
+      const rendered = await dejs.renderFileToString(
+        path.join(template.path, "chapter.xhtml.ejs"),
+        {
+          lang: this.options.lang,
+          prependChapterTitles: this.options.prependChapterTitles,
+          ...chapter,
+        },
+      );
+
+      oebps.addFile(`chapter-${chapter.filename}`, rendered);
     });
 
     const metainf = this.zip.folder("META-INF")!;
@@ -104,14 +121,6 @@ export class EPub {
       "container.xml",
       '<?xml version="1.0" encoding="UTF-8" ?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>',
     );
-
-    if (this.options.version === 2) {
-      // write meta-inf/com.apple.ibooks.display-options.xml [from pedrosanta:xhtml#6]
-      metainf.addFile(
-        "com.apple.ibooks.display-options.xml",
-        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><display_options><platform name="*"><option name="specified-fonts">true</option></platform></display_options>',
-      );
-    }
 
     const opt = {
       ...this.options,
@@ -121,14 +130,32 @@ export class EPub {
       content: this.content,
     };
 
+    const renderedFiles = {
+      contentOPF: await dejs.renderFileToString(
+        path.join(template.path, "content.opf.ejs"),
+        opt,
+      ),
+      tocNCX: await dejs.renderFileToString(
+        path.join(template.path, "toc.ncx.ejs"),
+        opt,
+      ),
+      tocXHTML: await dejs.renderFileToString(
+        path.join(template.path, "toc.xhtml.ejs"),
+        opt,
+      ),
+    };
+
     oebps.addFile(
       "content.opf",
-      await renderTemplate(this.options.contentOPF, opt),
+      renderedFiles.contentOPF,
     );
-    oebps.addFile("toc.ncx", await renderTemplate(this.options.tocNCX, opt));
+    oebps.addFile(
+      "toc.ncx",
+      renderedFiles.tocNCX,
+    );
     oebps.addFile(
       "toc.xhtml",
-      await renderTemplate(this.options.tocXHTML, opt),
+      renderedFiles.tocXHTML,
     );
   }
 
@@ -173,8 +200,8 @@ export class EPub {
 
   protected async downloadAllImages() {
     if (!this.images.length) return this.log("No images to download");
-    const oebps = this.zip.folder("OEBPS")!;
-    const images = oebps.folder("images")!;
+    const oebps = this.zip.folder("OEBPS");
+    const images = oebps.folder("images");
 
     for (let i = 0; i < this.images.length; i += this.options.batchSize) {
       const imageContents = await Promise.all(

@@ -3,6 +3,8 @@ export { normalizeSync as removeDiacritics } from "../deps.ts";
 export * from "./fetchable.ts";
 import fetchable from "./fetchable.ts";
 
+export const encoder = new TextEncoder();
+
 export const uuid = () =>
   "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
     .replace(/[xy]/g, (c) => {

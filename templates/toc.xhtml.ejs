@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" xml:lang="<%- lang %>"
+    lang="<%- lang %>">
+
+<head>
+    <title>
+        <%= title %>
+    </title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <h1 class="h1">
+        <%= tocTitle %>
+    </h1>
+    <nav id="toc" epub:type="toc">
+        <% if (numberChaptersInTOC){ %>
+            <ol>
+                <% }else{ %>
+                    <ol style="list-style: none">
+                        <% } %>
+                            <% for (let index=0; index < content.length; index++){ %>
+                                <% if(!content[index].excludeFromToc){ %>
+                                    <li class="table-of-content">
+                                        <a href="<%= content[index].filename %>">
+                                            <%= content[index].title %>
+                                                <% if(content[index].author.length){ %>
+                                                    - <small class="toc-author">
+                                                        <%= content[index].author.join(",") %>
+                                                    </small>
+                                                    <% }%>
+                                                        <% if(content[index].url){ %><span class="toc-link">
+                                                                <%= content[index].url %>
+                                                            </span>
+                                                            <% }%>
+                                        </a>
+                                    </li>
+                                    <% } %>
+                                        <% } %>
+                    </ol>
+    </nav>
+</body>
+
+</html>
