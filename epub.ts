@@ -4,11 +4,10 @@ import {
   mime,
   path,
   renderFileToString,
-  renderToString,
 } from "./deps.ts";
 
 import { Image } from "./util/html.ts";
-import { encoder, retryFetch, uuid } from "./util/other.ts";
+import { retryFetch, uuid } from "./util/other.ts";
 import { Content, NormChapter, NormOptions, Options } from "./util/validate.ts";
 import {
   validateAndNormalizeChapters,
@@ -16,7 +15,7 @@ import {
 } from "./util/mod.ts";
 
 const template = {
-  path: path.resolve(path.join(Deno.cwd(), "templates", "ejs")).toString(),
+  path: path.resolve(path.join(Deno.cwd(), "templates")).toString(),
   ejs: {
     rmWhitespace: true,
   },
@@ -107,14 +106,20 @@ export class EPub {
 
   protected async generateTemplateFiles() {
     const oebps = this.zip.folder("OEBPS")!;
-    oebps.addFile("style.css", this.options.css);
+    const css = Deno.readFileSync(
+      path.join(template.path, "template.css"),
+    );
+    oebps.addFile("style.css", css);
 
     this.content.forEach(async (chapter) => {
-      const rendered = await renderToString(this.options.chapterXHTML, {
-        lang: this.options.lang,
-        prependChapterTitles: this.options.prependChapterTitles,
-        ...chapter,
-      });
+      const rendered = await renderFileToString(
+        path.join(template.path, "chapter.xhtml.ejs"),
+        {
+          lang: this.options.lang,
+          prependChapterTitles: this.options.prependChapterTitles,
+          ...chapter,
+        },
+      );
 
       oebps.addFile(`chapter-${chapter.filename}`, rendered);
     });
@@ -125,20 +130,6 @@ export class EPub {
       '<?xml version="1.0" encoding="UTF-8" ?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>',
     );
 
-    if (this.options.version === 2) {
-      // write meta-inf/com.apple.ibooks.display-options.xml [from pedrosanta:xhtml#6]
-      metainf.addFile(
-        "com.apple.ibooks.display-options.xml",
-        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-          <display_options>
-          <platform name="*">
-            <option name="specified-fonts">true</option>
-          </platform>
-        </display_options>
-        `,
-      );
-    }
-
     const opt = {
       ...this.options,
       id: this.uuid,
@@ -146,16 +137,11 @@ export class EPub {
       cover: this.cover,
       content: this.content,
     };
-    const { chapterXHTML, tocNCX, tocXHTML, contentOPF } = opt;
-
-    Deno.writeFileSync("temp/chapterXHTML.xhtml", encoder.encode(chapterXHTML));
-    Deno.writeFileSync(
-      "temp/chapterXHTML.opts.json",
-      encoder.encode(JSON.stringify(opt)),
-    );
 
     // const rendered = await renderToString(chapterXHTML, opt);
     // console.log("contentOPF", { rendered });
+
+    this.log("Generating content for content.opf...", opt.content);
 
     // const data = await renderFileToString(
     //   path.join(template.path, "toc.ncx.ejs"),
@@ -185,7 +171,7 @@ export class EPub {
       ),
     };
 
-    // console.log("rendered remplates", { render });
+    console.log("rendered remplates", { renderedFiles });
 
     oebps.addFile(
       "content.opf",
