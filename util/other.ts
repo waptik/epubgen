@@ -33,7 +33,7 @@ export const retryFetch = async (
   return fetchable(url, timeout);
 };
 
-export async function fetchLocalFile(file: string) {
+export async function fetchFileContent(file: string) {
   const url = new URL(file, import.meta.url);
   const response = await fetch(url);
   const data = await response.text();
@@ -41,5 +41,7 @@ export async function fetchLocalFile(file: string) {
 }
 
 export function pathToUrl(path: string) {
-  return new URL(path, import.meta.url).href;
+  path = new URL(path, import.meta.url).href;
+  console.log({ path });
+  return path;
 }

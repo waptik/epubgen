@@ -1,12 +1,12 @@
 import { dejs, JSZip, type JSZipGeneratorOptions, mime, path } from "./deps.ts";
 
 import { Image } from "./util/html.ts";
-import { fetchLocalFile, pathToUrl, retryFetch, uuid } from "./util/other.ts";
-import { Content, NormChapter, NormOptions, Options } from "./util/validate.ts";
 import {
   validateAndNormalizeChapters,
   validateAndNormalizeOptions,
 } from "./util/mod.ts";
+import { fetchFileContent, retryFetch, uuid } from "./util/other.ts";
+import { Content, NormChapter, NormOptions, Options } from "./util/validate.ts";
 
 const template = {
   path: path.resolve(path.join(Deno.cwd(), "templates")).toString(),
@@ -98,15 +98,15 @@ export class EPub {
 
   protected async generateTemplateFiles() {
     const oebps = this.zip.folder("OEBPS")!;
-    const css = await fetchLocalFile(
+    const css = await fetchFileContent(
       path.join(template.path, "template.css"),
     );
 
     oebps.addFile("style.css", css);
 
     this.content.forEach(async (chapter) => {
-      const rendered = await dejs.renderFileToString(
-        pathToUrl(path.join(template.path, "chapter.xhtml.ejs")),
+      const rendered = await dejs.renderToString(
+        await fetchFileContent(path.join(template.path, "chapter.xhtml.ejs")),
         {
           lang: this.options.lang,
           prependChapterTitles: this.options.prependChapterTitles,
@@ -132,16 +132,16 @@ export class EPub {
     };
 
     const renderedFiles = {
-      contentOPF: await dejs.renderFileToString(
-        pathToUrl(path.join(template.path, "content.opf.ejs")),
+      contentOPF: await dejs.renderToString(
+        await fetchFileContent(path.join(template.path, "content.opf.ejs")),
         opt,
       ),
-      tocNCX: await dejs.renderFileToString(
-        pathToUrl(path.join(template.path, "toc.ncx.ejs")),
+      tocNCX: await dejs.renderToString(
+        await fetchFileContent(path.join(template.path, "toc.ncx.ejs")),
         opt,
       ),
-      tocXHTML: await dejs.renderFileToString(
-        pathToUrl(path.join(template.path, "toc.xhtml.ejs")),
+      tocXHTML: await dejs.renderToString(
+        await fetchFileContent(path.join(template.path, "toc.xhtml.ejs")),
         opt,
       ),
     };
