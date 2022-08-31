@@ -1,10 +1,4 @@
-import {
-  JSZip,
-  type JSZipGeneratorOptions,
-  mime,
-  path,
-  renderFileToString,
-} from "./deps.ts";
+import { dejs, JSZip, type JSZipGeneratorOptions, mime, path } from "./deps.ts";
 
 import { Image } from "./util/html.ts";
 import { retryFetch, uuid } from "./util/other.ts";
@@ -110,7 +104,7 @@ export class EPub {
     oebps.addFile("style.css", css);
 
     this.content.forEach(async (chapter) => {
-      const rendered = await renderFileToString(
+      const rendered = await dejs.renderFileToString(
         path.join(template.path, "chapter.xhtml.ejs"),
         {
           lang: this.options.lang,
@@ -137,15 +131,15 @@ export class EPub {
     };
 
     const renderedFiles = {
-      contentOPF: await renderFileToString(
+      contentOPF: await dejs.renderFileToString(
         path.join(template.path, "content.opf.ejs"),
         opt,
       ),
-      tocNCX: await renderFileToString(
+      tocNCX: await dejs.renderFileToString(
         path.join(template.path, "toc.ncx.ejs"),
         opt,
       ),
-      tocXHTML: await renderFileToString(
+      tocXHTML: await dejs.renderFileToString(
         path.join(template.path, "toc.xhtml.ejs"),
         opt,
       ),
