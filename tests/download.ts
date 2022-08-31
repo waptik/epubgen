@@ -11,10 +11,10 @@ class Download {
 
   async epub() {
     const content = await epubgen(optionsAlice, contentAlice);
-    // await Deno.writeFile(
-    //   `./novels/alice_${this.uuid}.epub`,
-    //   new Uint8Array(content),
-    // );
+    await Deno.writeFile(
+      `temp/alice_${this.uuid}.epub`,
+      content,
+    );
 
     // optionsAlice.numberChaptersInTOC = false;
     // const content2 = await epubgen(optionsAlice, contentAlice);

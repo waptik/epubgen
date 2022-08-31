@@ -2,16 +2,25 @@ import {
   JSZip,
   type JSZipGeneratorOptions,
   mime,
-  renderTemplate,
+  path,
+  renderFileToString,
+  renderToString,
 } from "./deps.ts";
 
 import { Image } from "./util/html.ts";
-import { retryFetch, uuid } from "./util/other.ts";
+import { encoder, retryFetch, uuid } from "./util/other.ts";
 import { Content, NormChapter, NormOptions, Options } from "./util/validate.ts";
 import {
   validateAndNormalizeChapters,
   validateAndNormalizeOptions,
 } from "./util/mod.ts";
+
+const template = {
+  path: path.resolve(path.join(Deno.cwd(), "templates", "ejs")).toString(),
+  ejs: {
+    rmWhitespace: true,
+  },
+};
 
 export class EPub {
   protected options: NormOptions;
@@ -19,6 +28,7 @@ export class EPub {
   protected uuid: string;
   protected images: Image[] = [];
   protected cover?: { extension: string; mediaType: string };
+  protected title: string;
 
   protected log: typeof console.log;
   protected warn: typeof console.warn;
@@ -41,6 +51,7 @@ export class EPub {
     }
     this.uuid = uuid();
     this.content = validateAndNormalizeChapters.call(this, content);
+    this.title = this.options.title;
     this.zip = new JSZip();
     this.zip.addFile("mimetype", "application/epub+zip", {
       compression: "STORE",
@@ -53,6 +64,8 @@ export class EPub {
         this.cover = { mediaType, extension };
       }
     }
+
+    console.log({ template });
   }
 
   async render() {
@@ -68,10 +81,16 @@ export class EPub {
     return this;
   }
 
+  async save() {
+    // const content = await this.genEpub();
+    // this.zip.g
+    // Deno.writeFileSync(this.options.output, content);
+  }
+
   async genEpub() {
     await this.render();
     const content = this.zip.generateAsync({
-      type: "arraybuffer",
+      type: "uint8array",
       mimeType: "application/epub+zip",
       compression: "DEFLATE",
       compressionOptions: {
@@ -91,12 +110,13 @@ export class EPub {
     oebps.addFile("style.css", this.options.css);
 
     this.content.forEach(async (chapter) => {
-      const rendered = await renderTemplate(this.options.chapterXHTML, {
+      const rendered = await renderToString(this.options.chapterXHTML, {
         lang: this.options.lang,
         prependChapterTitles: this.options.prependChapterTitles,
         ...chapter,
       });
-      oebps.addFile(chapter.filename, rendered);
+
+      oebps.addFile(`chapter-${chapter.filename}`, rendered);
     });
 
     const metainf = this.zip.folder("META-INF")!;
@@ -109,7 +129,13 @@ export class EPub {
       // write meta-inf/com.apple.ibooks.display-options.xml [from pedrosanta:xhtml#6]
       metainf.addFile(
         "com.apple.ibooks.display-options.xml",
-        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><display_options><platform name="*"><option name="specified-fonts">true</option></platform></display_options>',
+        `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+          <display_options>
+          <platform name="*">
+            <option name="specified-fonts">true</option>
+          </platform>
+        </display_options>
+        `,
       );
     }
 
@@ -120,15 +146,58 @@ export class EPub {
       cover: this.cover,
       content: this.content,
     };
+    const { chapterXHTML, tocNCX, tocXHTML, contentOPF } = opt;
+
+    Deno.writeFileSync("temp/chapterXHTML.xhtml", encoder.encode(chapterXHTML));
+    Deno.writeFileSync(
+      "temp/chapterXHTML.opts.json",
+      encoder.encode(JSON.stringify(opt)),
+    );
+
+    // const rendered = await renderToString(chapterXHTML, opt);
+    // console.log("contentOPF", { rendered });
+
+    // const data = await renderFileToString(
+    //   path.join(template.path, "toc.ncx.ejs"),
+    //   opt,
+    // );
+    // oebps.addFile("toc.ncx", data);
+    // this.log("saved content.opf to oebps", data);
+
+    // const render = {
+    //   contentOPF: await renderToString(contentOPF, opt),
+    //   tocNCX: await renderToString(tocNCX, opt),
+    //   tocXHTML: await renderToString(tocXHTML, opt),
+    // };
+
+    const renderedFiles = {
+      contentOPF: await renderFileToString(
+        path.join(template.path, "content.opf.ejs"),
+        opt,
+      ),
+      tocNCX: await renderFileToString(
+        path.join(template.path, "toc.ncx.ejs"),
+        opt,
+      ),
+      tocXHTML: await renderFileToString(
+        path.join(template.path, "toc.xhtml.ejs"),
+        opt,
+      ),
+    };
+
+    // console.log("rendered remplates", { render });
 
     oebps.addFile(
       "content.opf",
-      await renderTemplate(this.options.contentOPF, opt),
+      renderedFiles.contentOPF,
     );
-    oebps.addFile("toc.ncx", await renderTemplate(this.options.tocNCX, opt));
+    oebps.addFile(
+      "toc.ncx",
+      renderedFiles.tocNCX,
+    );
     oebps.addFile(
       "toc.xhtml",
-      await renderTemplate(this.options.tocXHTML, opt),
+      renderedFiles.tocXHTML,
     );
   }
 
@@ -173,8 +242,8 @@ export class EPub {
 
   protected async downloadAllImages() {
     if (!this.images.length) return this.log("No images to download");
-    const oebps = this.zip.folder("OEBPS")!;
-    const images = oebps.folder("images")!;
+    const oebps = this.zip.folder("OEBPS");
+    const images = oebps.folder("images");
 
     for (let i = 0; i < this.images.length; i += this.options.batchSize) {
       const imageContents = await Promise.all(
@@ -202,10 +271,13 @@ export class EPub {
             : d;
         }),
       );
+      this.log(`Downloaded ${imageContents.length} images`, { imageContents });
       imageContents.forEach((image) =>
         images.addFile(`${image.id}.${image.extension}`, image.data)
       );
     }
+
+    this.log("Downloaded all images", { images: this.images });
   }
 
   protected async makeCover() {

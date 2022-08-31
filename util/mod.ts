@@ -1,13 +1,10 @@
 import uslug from "https://esm.sh/uslug@1.0.4";
 
-import chapterXHTML2 from "../templates/epub2/chapter.xhtml.ejs.ts";
-import contentOPF2 from "../templates/epub2/content.opf.ejs.ts";
-import tocXHTML2 from "../templates/epub2/toc.xhtml.ejs.ts";
-import chapterXHTML3 from "../templates/epub3/chapter.xhtml.ejs.ts";
-import contentOPF3 from "../templates/epub3/content.opf.ejs.ts";
-import tocXHTML3 from "../templates/epub3/toc.xhtml.ejs.ts";
-import css from "../templates/template.css.ts";
-import tocNCX from "../templates/toc.ncx.ejs.ts";
+import chapterXHTML3 from "../templates/ts/chapter.xhtml.ejs.ts";
+import contentOPF3 from "../templates/ts/content.opf.ejs.ts";
+import tocXHTML3 from "../templates/ts/toc.xhtml.ejs.ts";
+import css from "../templates/ts/template.css.ts";
+import tocNCX from "../templates/ts/toc.ncx.ejs.ts";
 
 import { mime, ow } from "../deps.ts";
 import { EPub } from "../epub.ts";
@@ -32,7 +29,7 @@ export { chapterPredicate, optionsPredicate };
 export type { Chapter, Content, Font, NormChapter, NormOptions, Options };
 
 export const optionsDefaults = (version = 3): Omit<Options, "title"> => ({
-  description: "",
+  description: "no description",
   author: ["anonymous"],
   publisher: "anonymous",
   tocTitle: "Table of Contents",
@@ -42,10 +39,10 @@ export const optionsDefaults = (version = 3): Omit<Options, "title"> => ({
   date: new Date().toISOString(),
   lang: "en",
   css,
-  chapterXHTML: version === 2 ? chapterXHTML2 : chapterXHTML3,
-  contentOPF: version === 2 ? contentOPF2 : contentOPF3,
+  chapterXHTML: chapterXHTML3,
+  contentOPF: contentOPF3,
   tocNCX,
-  tocXHTML: version === 2 ? tocXHTML2 : tocXHTML3,
+  tocXHTML: tocXHTML3,
   fonts: [],
   version,
   fetchTimeout: 20000,
