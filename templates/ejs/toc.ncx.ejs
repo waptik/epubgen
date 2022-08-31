@@ -14,36 +14,15 @@
         <text><%= author %></text>
     </docAuthor>
     <navMap>
-        <% var _index = 0; %>
-        <% content.forEach(function(content, index){ %>
-            <% if(!content.excludeFromToc && content.beforeToc){ %>
-                <navPoint id="content_<%= index %>_<%= content.id %>" playOrder="<%= _index++ %>" class="chapter">
+        <% for (let i=0; i < content.length; i++){ %>
+            <% if(!content[i].excludeFromToc && content.beforeToc){ %>
+                <navPoint id="content_<%= i %>_<%= content[i].id %>" playOrder="<%= i++ %>" class="chapter">
                     <navLabel>
-                        <text><%= (numberChaptersInTOC ? (1+index) + ". " : "") + content.title %></text>
+                        <text><%= (numberChaptersInTOC ? (1 + i) + ". " : "") + content[i].title %></text>
                     </navLabel>
-                    <content src="<%= content.filename %>"/>
+                    <content src="<%= content[i].filename %>"/>
                 </navPoint>
             <% } %>
-        <% }) %>
-        
-        <% if (tocInTOC){ %>
-            <navPoint id="toc" playOrder="<%= _index++ %>" class="chapter">
-                <navLabel>
-                    <text><%= tocTitle %></text>
-                </navLabel>
-                <content src="toc.xhtml"/>
-            </navPoint>
         <% } %>
-
-        <% content.forEach(function(content, index){ %>
-            <% if(!content.excludeFromToc && !content.beforeToc){ %>
-                <navPoint id="content_<%= index %>_<%= content.id %>" playOrder="<%= _index++ %>" class="chapter">
-                    <navLabel>
-                        <text><%= (numberChaptersInTOC ? (1+index) + ". " : "") + content.title %></text>
-                    </navLabel>
-                    <content src="<%= content.filename %>"/>
-                </navPoint>
-            <% } %>
-        <% }) %>
     </navMap>
 </ncx>
