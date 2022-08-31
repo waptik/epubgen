@@ -32,3 +32,16 @@ export const retryFetch = async (
   // last try, no catching
   return fetchable(url, timeout);
 };
+
+export async function fetchFileContent(file: string) {
+  const url = new URL(file, import.meta.url);
+  const response = await fetch(url);
+  const data = await response.text();
+  return data;
+}
+
+export function pathToUrl(path: string) {
+  path = new URL(path, import.meta.url).href;
+  console.log({ path });
+  return path;
+}
