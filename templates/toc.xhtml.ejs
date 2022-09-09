@@ -25,20 +25,18 @@
                                 <% if(!content[index].excludeFromToc){ %>
                                     <li class="table-of-content">
                                         <a href="<%= content[index].filename %>">
-                                            <%= content[index].title %>
+                                            <%= (content[index].title || "Chapter " + (1+index)) %>
                                                 <% if(content[index].author.length){ %>
                                                     - <small class="toc-author">
                                                         <%= content[index].author.join(",") %>
                                                     </small>
                                                     <% }%>
-                                                        <a href="<%= content.filename %>">
-                                                            <%= (content[index].title || "Chapter " + (1+index)) %>
-                                                                <% if(content[index].url){ %>
-                                                                    <span class="toc-link">
-                                                                        <%= content[index].url %>
-                                                                    </span>
-                                                                    <% }%>
-                                                        </a>
+                                                        <% if(content[index].url){ %>
+                                                            <span class="toc-link">
+                                                                <%= content[index].url %>
+                                                            </span>
+                                                            <% }%>
+
                                         </a>
                                     </li>
                                     <% } %>
