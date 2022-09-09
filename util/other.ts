@@ -1,6 +1,7 @@
 export { normalizeSync as removeDiacritics } from "../deps.ts";
 
 export * from "./fetchable.ts";
+import { dejs, path } from "../deps.ts";
 import fetchable from "./fetchable.ts";
 
 export const encoder = new TextEncoder();
@@ -33,6 +34,9 @@ export const retryFetch = async (
   return fetchable(url, timeout);
 };
 
+const currentPath = path.dirname(path.fromFileUrl(import.meta.url));
+export const templatesPath = path.join(currentPath, "..", "templates");
+
 export async function fetchFileContent(file: string) {
   const templatesGitHubURL =
     "https://raw.githubusercontent.com/waptik/epubgen/main/templates";
@@ -40,3 +44,28 @@ export async function fetchFileContent(file: string) {
   const response = await fetch(url);
   return await response.text();
 }
+
+export async function getTemplate(fileName: string) {
+  const filePath = path.join(templatesPath, fileName);
+  const content = await Deno.readTextFile(filePath);
+  return content;
+}
+
+export const renderTemplate = (
+  fileName: string,
+  data: Record<string, unknown>,
+) => {
+  return new Promise<string>((resolve, reject) => {
+    getTemplate(fileName).then((template) => {
+      dejs.renderToString(template, data).then(
+        (
+          rendered,
+        ) => {
+          resolve(rendered);
+        },
+      ).catch((error) => {
+        reject(error);
+      });
+    });
+  });
+};

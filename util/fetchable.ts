@@ -6,6 +6,8 @@ const fetchable = async (url: string, timeout: number) => {
 
   try {
     if (url.startsWith("file://")) {
+      console.log("fetchable: url.startsWith(file://)");
+
       return Deno.readFile(new URL(url), { signal: controller.signal });
     }
 

@@ -1,19 +1,19 @@
-import { dejs, JSZip, type JSZipGeneratorOptions, mime, path } from "./deps.ts";
+import { JSZip, type JSZipGeneratorOptions, mime, path } from "./deps.ts";
 
 import { Image } from "./util/html.ts";
 import {
   validateAndNormalizeChapters,
   validateAndNormalizeOptions,
 } from "./util/mod.ts";
-import { fetchFileContent, retryFetch, uuid } from "./util/other.ts";
+import {
+  renderTemplate,
+  retryFetch,
+  templatesPath,
+  uuid,
+} from "./util/other.ts";
 import { Content, NormChapter, NormOptions, Options } from "./util/validate.ts";
 
-const template = {
-  path: path.resolve(path.join(Deno.cwd(), "templates")).toString(),
-  ejs: {
-    rmWhitespace: true,
-  },
-};
+// import ejs from "https://esm.sh/ejs@3.1.8";
 
 export class EPub {
   protected options: NormOptions;
@@ -21,7 +21,6 @@ export class EPub {
   protected uuid: string;
   protected images: Image[] = [];
   protected cover?: { extension: string; mediaType: string };
-  protected title: string;
 
   protected log: typeof console.log;
   protected warn: typeof console.warn;
@@ -44,15 +43,13 @@ export class EPub {
     }
     this.uuid = uuid();
     this.content = validateAndNormalizeChapters.call(this, content);
-    this.title = this.options.title;
     this.zip = new JSZip();
     this.zip.addFile("mimetype", "application/epub+zip", {
       compression: "STORE",
     });
-
     if (this.options.cover) {
       const mediaType = mime.getType(this.options.cover);
-      const extension = mime.getExtension(mediaType || "");
+      const extension = mime.getExtension(mediaType || ".jpg");
       if (mediaType && extension) {
         this.cover = { mediaType, extension };
       }
@@ -70,12 +67,6 @@ export class EPub {
     await this.makeCover();
     this.log("Finishing up...");
     return this;
-  }
-
-  async save() {
-    // const content = await this.genEpub();
-    // this.zip.g
-    // Deno.writeFileSync(this.options.output, content);
   }
 
   async genEpub() {
@@ -97,27 +88,30 @@ export class EPub {
   }
 
   protected async generateTemplateFiles() {
-    const oebps = this.zip.folder("OEBPS")!;
-    const css = await fetchFileContent("template.css");
+    const data = Deno.readFileSync(path.join(templatesPath, "template.css"));
+    const css = new TextDecoder("utf-8").decode(data);
 
-    oebps.addFile("style.css", css);
+    this.zip.addFile("style.css", css);
+
+    await Deno.writeTextFile("temp/alice/style.css", css);
 
     this.content.forEach(async (chapter) => {
-      const rendered = await dejs.renderToString(
-        await fetchFileContent("chapter.xhtml.ejs"),
-        {
-          lang: this.options.lang,
-          prependChapterTitles: this.options.prependChapterTitles,
-          ...chapter,
-        },
+      const rendered = await renderTemplate("chapter.xhtml.ejs", {
+        lang: this.options.lang,
+        prependChapterTitles: this.options.prependChapterTitles,
+        ...chapter,
+      });
+
+      await Deno.writeFile(
+        `temp/alice/chapter-${chapter.filename}`,
+        new TextEncoder().encode(rendered),
       );
 
-      oebps.addFile(`chapter-${chapter.filename}`, rendered);
+      this.zip.addFile(chapter.filename, rendered);
     });
 
-    const metainf = this.zip.folder("META-INF")!;
-    metainf.addFile(
-      "container.xml",
+    this.zip.addFile(
+      "OEBPS/container.xml",
       '<?xml version="1.0" encoding="UTF-8" ?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>',
     );
 
@@ -129,39 +123,20 @@ export class EPub {
       content: this.content,
     };
 
-    const renderedFiles = {
-      contentOPF: await dejs.renderToString(
-        await fetchFileContent("content.opf.ejs"),
-        opt,
-      ),
-      tocNCX: await dejs.renderToString(
-        await fetchFileContent("toc.ncx.ejs"),
-        opt,
-      ),
-      tocXHTML: await dejs.renderToString(
-        await fetchFileContent("toc.xhtml.ejs"),
-        opt,
-      ),
-    };
-
-    oebps.addFile(
-      "content.opf",
-      renderedFiles.contentOPF,
-    );
-    oebps.addFile(
-      "toc.ncx",
-      renderedFiles.tocNCX,
-    );
-    oebps.addFile(
-      "toc.xhtml",
-      renderedFiles.tocXHTML,
-    );
+    renderTemplate("content.opf.ejs", opt).then((content) => {
+      this.zip.addFile("OEBPS/content.opf", content);
+    });
+    renderTemplate("toc.ncx.ejs", opt).then((toc) => {
+      this.zip.addFile("OEBPS/toc.ncx", toc);
+    });
+    renderTemplate("toc.xhtml.ejs", opt).then((toc) => {
+      this.zip.addFile("OEBPS/toc.xhtml", toc);
+    });
   }
 
   protected async downloadAllFonts() {
     if (!this.options.fonts.length) return this.log("No fonts to download");
-    const oebps = this.zip.folder("OEBPS")!;
-    const fonts = oebps.folder("fonts")!;
+    const fonts = this.zip.folder("OEBPS/fonts")!;
 
     for (
       let i = 0;
@@ -199,8 +174,7 @@ export class EPub {
 
   protected async downloadAllImages() {
     if (!this.images.length) return this.log("No images to download");
-    const oebps = this.zip.folder("OEBPS");
-    const images = oebps.folder("images");
+    const images = this.zip.folder("OEBPS/images");
 
     for (let i = 0; i < this.images.length; i += this.options.batchSize) {
       const imageContents = await Promise.all(
@@ -236,7 +210,6 @@ export class EPub {
 
   protected async makeCover() {
     if (!this.cover) return this.log("No cover to download");
-    const oebps = this.zip.folder("OEBPS")!;
     const coverContent = await retryFetch(
       this.options.cover,
       this.options.fetchTimeout,
@@ -250,6 +223,6 @@ export class EPub {
         ),
           ""),
       );
-    oebps.addFile(`cover.${this.cover.extension}`, coverContent);
+    this.zip.addFile(`OEBPS/cover.${this.cover.extension}`, coverContent);
   }
 }
