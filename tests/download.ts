@@ -18,7 +18,7 @@ class Download {
         `temp/${filename}`,
         content,
       );
-      console.log(`Downloaded epub: ${filename}`);
+      console.log(`Downloaded epub: ${optionsAlice.title} -> ${filename}`);
     } catch (error) {
       console.error(error);
     }
