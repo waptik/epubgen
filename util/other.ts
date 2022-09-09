@@ -33,22 +33,13 @@ export const retryFetch = async (
   // last try, no catching
   return fetchable(url, timeout);
 };
-
-const currentPath = path.dirname(path.fromFileUrl(import.meta.url));
-export const templatesPath = path.join(currentPath, "..", "templates");
-
 export async function fetchFileContent(file: string) {
   const templatesGitHubURL =
     "https://raw.githubusercontent.com/waptik/epubgen/main/templates";
   const url = new URL(`${templatesGitHubURL}/${file}`, import.meta.url);
+
   const response = await fetch(url);
   return await response.text();
-}
-
-export async function getTemplate(fileName: string) {
-  const filePath = path.join(templatesPath, fileName);
-  const content = await Deno.readTextFile(filePath);
-  return content;
 }
 
 export const renderTemplate = (
@@ -56,7 +47,7 @@ export const renderTemplate = (
   data: Record<string, unknown>,
 ) => {
   return new Promise<string>((resolve, reject) => {
-    getTemplate(fileName).then((template) => {
+    fetchFileContent(fileName).then((template) => {
       dejs.renderToString(template, data).then(
         (
           rendered,

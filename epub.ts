@@ -1,4 +1,4 @@
-import { JSZip, type JSZipGeneratorOptions, mime, path } from "./deps.ts";
+import { JSZip, type JSZipGeneratorOptions, mime } from "./deps.ts";
 
 import { Image } from "./util/html.ts";
 import {
@@ -6,9 +6,9 @@ import {
   validateAndNormalizeOptions,
 } from "./util/mod.ts";
 import {
+  fetchFileContent,
   renderTemplate,
   retryFetch,
-  templatesPath,
   uuid,
 } from "./util/other.ts";
 import { Content, NormChapter, NormOptions, Options } from "./util/validate.ts";
@@ -88,12 +88,9 @@ export class EPub {
   }
 
   protected async generateTemplateFiles() {
-    const data = Deno.readFileSync(path.join(templatesPath, "template.css"));
-    const css = new TextDecoder("utf-8").decode(data);
+    const css = await fetchFileContent("template.css");
 
     this.zip.addFile("OEBPS/style.css", css);
-
-    await Deno.writeTextFile("temp/alice/style.css", css);
 
     this.content.forEach(async (chapter) => {
       const rendered = await renderTemplate("chapter.xhtml.ejs", {
