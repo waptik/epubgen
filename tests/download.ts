@@ -1,3 +1,4 @@
+// import epubgen from "https://esm.sh/epub-gen-memory@1.0.9/sabstub?target=node&deps=domhandler,domutils,htmlparser2";
 import epubgen from "../mod.ts";
 
 import { contentAlice, optionsAlice } from "./aliceData.ts"; // modified copy of https://github.com/cpiber/epub-gen-memory/blob/master/tests/aliceData.ts
@@ -10,18 +11,17 @@ class Download {
   }
 
   async epub() {
-    const content = await epubgen(optionsAlice, contentAlice);
-    await Deno.writeFile(
-      `temp/alice_${this.uuid}.epub`,
-      content,
-    );
-
-    // optionsAlice.numberChaptersInTOC = false;
-    // const content2 = await epubgen(optionsAlice, contentAlice);
-    // await Deno.writeFile(
-    //   `./novels/alice_${this.uuid}_nonum.epub`,
-    //   new Uint8Array(content2),
-    // );
+    try {
+      const filename = `alice_${this.uuid}.epub`;
+      const content = await epubgen(optionsAlice, contentAlice);
+      await Deno.writeFile(
+        `temp/${filename}`,
+        content,
+      );
+      console.log(`Downloaded epub: ${filename}`);
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
 
