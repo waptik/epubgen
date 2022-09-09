@@ -1,28 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ncx xmlns="http://www.daisy.org/z3986/2005/ncx/" version="2005-1">
+
     <head>
         <meta name="dtb:uid" content="<%= id %>" />
-        <meta name="dtb:generator" content="epub-gen"/>
-        <meta name="dtb:depth" content="1"/>
-        <meta name="dtb:totalPageCount" content="0"/>
-        <meta name="dtb:maxPageNumber" content="0"/>
+        <meta name="dtb:generator" content="epub-gen" />
+        <meta name="dtb:depth" content="1" />
+        <meta name="dtb:totalPageCount" content="0" />
+        <meta name="dtb:maxPageNumber" content="0" />
     </head>
     <docTitle>
-        <text><%= title %></text>
+        <text>
+            <%= title %>
+        </text>
     </docTitle>
     <docAuthor>
-        <text><%= author %></text>
+        <text>
+            <%= author %>
+        </text>
     </docAuthor>
     <navMap>
-        <% for (let i=0; i < content.length; i++){ %>
-            <% if(!content[i].excludeFromToc && content.beforeToc){ %>
-                <navPoint id="content_<%= i %>_<%= content[i].id %>" playOrder="<%= i++ %>" class="chapter">
-                    <navLabel>
-                        <text><%= (numberChaptersInTOC ? (1 + i) + ". " : "") + content[i].title %></text>
-                    </navLabel>
-                    <content src="<%= content[i].filename %>"/>
-                </navPoint>
-            <% } %>
-        <% } %>
+        <% var _index=0; %>
+            <navPoint id="toc" playOrder="<%= _index++ %>" class="chapter">
+                <navLabel>
+                    <text>
+                        <%= tocTitle %>
+                    </text>
+                </navLabel>
+                <content src="toc.xhtml" />
+            </navPoint>
+            <% for (let i=_index; i < content.length; i++){ %>
+                <% if(!content[i].excludeFromToc && content.beforeToc){ %>
+                    <navPoint id="content_<%= i %>_<%= content[i].id %>" playOrder="<%= i++ %>" class="chapter">
+                        <navLabel>
+                            <text>
+                                <%= (numberChaptersInTOC ? (1 + i) + ". " : "" ) + (content[i].title || "Chapter " +
+                                    (1+i)) %>
+                            </text>
+                        </navLabel>
+                        <content src="<%= content[i].filename %>" />
+                    </navPoint>
+                    <% } %>
+                        <% } %>
     </navMap>
 </ncx>

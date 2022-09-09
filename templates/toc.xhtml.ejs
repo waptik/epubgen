@@ -31,10 +31,14 @@
                                                         <%= content[index].author.join(",") %>
                                                     </small>
                                                     <% }%>
-                                                        <% if(content[index].url){ %><span class="toc-link">
-                                                                <%= content[index].url %>
-                                                            </span>
-                                                            <% }%>
+                                                        <a href="<%= content.filename %>">
+                                                            <%= (content[index].title || "Chapter " + (1+index)) %>
+                                                                <% if(content[index].url){ %>
+                                                                    <span class="toc-link">
+                                                                        <%= content[index].url %>
+                                                                    </span>
+                                                                    <% }%>
+                                                        </a>
                                         </a>
                                     </li>
                                     <% } %>
