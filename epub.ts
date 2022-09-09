@@ -91,7 +91,7 @@ export class EPub {
     const data = Deno.readFileSync(path.join(templatesPath, "template.css"));
     const css = new TextDecoder("utf-8").decode(data);
 
-    this.zip.addFile("style.css", css);
+    this.zip.addFile("OEBPS/style.css", css);
 
     await Deno.writeTextFile("temp/alice/style.css", css);
 
@@ -102,17 +102,17 @@ export class EPub {
         ...chapter,
       });
 
-      await Deno.writeFile(
-        `temp/alice/chapter-${chapter.filename}`,
-        new TextEncoder().encode(rendered),
-      );
-
-      this.zip.addFile(chapter.filename, rendered);
+      this.zip.addFile(chapter.href, rendered);
     });
 
     this.zip.addFile(
-      "OEBPS/container.xml",
-      '<?xml version="1.0" encoding="UTF-8" ?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>',
+      "META-INF/container.xml",
+      `<?xml version="1.0" encoding="UTF-8" ?>
+            <container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container">
+                <rootfiles>
+                    <rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/>
+                </rootfiles>
+            </container>`,
     );
 
     const opt = {
@@ -223,6 +223,7 @@ export class EPub {
         ),
           ""),
       );
+
     this.zip.addFile(`OEBPS/cover.${this.cover.extension}`, coverContent);
   }
 }
