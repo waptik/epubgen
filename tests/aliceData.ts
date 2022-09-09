@@ -4,7 +4,8 @@ const date = new Date();
 date.setFullYear(2000);
 
 export const optionsAlice: Options = {
-  title: "Alice's Adventures in Wonderland",
+  title: "Alice's Adventures in Wonderland(" +
+    crypto.randomUUID().split("-")[0] + ")",
   author: "Lewis Carroll",
   publisher: "Macmillan & Co.",
   date: date.toString(),
