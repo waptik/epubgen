@@ -100,10 +100,11 @@ export const validateAndNormalizeChapter = (
 
   const slug = uslug(removeDiacritics(ch.title));
   if (!ch.filename) {
-    ch.filename = `${index}_${slug}.xhtml`;
+    ch.filename = `content_${index}_${slug}.xhtml`;
   } else if (!ch.filename.endsWith(".xhtml")) {
-    ch.filename = `${ch.filename}.xhtml`;
+    ch.filename = `content_${ch.filename}.xhtml`;
   }
   ch.author = normName(ch.author);
+  ch.href = `OEBPS/${ch.filename}`;
   return ch;
 };

@@ -121,5 +121,6 @@ export type NormChapter = NonNullableObject<
   Merge<Chapter, {
     id: string;
     author: string[];
+    href: string;
   }>
 >;
