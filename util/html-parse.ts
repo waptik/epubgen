@@ -10,7 +10,7 @@ import {
 } from "https://deno.land/x/html_parser@v0.1.3/src/mod.ts";
 
 import type { EPub } from "../epub.ts";
-import { allowedAttributes, allowedXhtml11Tags } from "./constants.ts";
+import { allowedAttributes } from "./constants.ts";
 import type { CB } from "./html.ts";
 
 const allNodes = compile("*");
@@ -23,13 +23,14 @@ export function fixHTML(this: EPub, index: number, html: string, imgCB: CB) {
 
   // reverse to make sure we transform innermost first
   selectAll<Node, Element>(allNodes, document).reverse().forEach((element) => {
-    for (const name of Object.keys(element.attribs)) {
-      this.log("selectAll 1", { name });
+    console.log("element: ", element);
 
+    for (const name of Object.keys(element.attribs)) {
       if (
         allowedAttributes.indexOf(name as typeof allowedAttributes[number]) ===
           -1
       ) {
+        this.log("selectAll 1", { name });
         this.warn(
           `Warning (content[${index}]): attribute ${name} isn't allowed.`,
         );
