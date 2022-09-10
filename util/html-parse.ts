@@ -10,7 +10,7 @@ import {
 } from "https://deno.land/x/html_parser@v0.1.3/src/mod.ts";
 
 import type { EPub } from "../epub.ts";
-import { allowedAttributes, allowedXhtml11Tags } from "./constants.ts";
+import { allowedAttributes } from "./constants.ts";
 import type { CB } from "./html.ts";
 
 const allNodes = compile("*");
@@ -33,18 +33,6 @@ export function fixHTML(this: EPub, index: number, html: string, imgCB: CB) {
         );
         delete element.attribs[name];
       }
-    }
-
-    if (
-      this.options.version === 2 &&
-      allowedXhtml11Tags.indexOf(
-          element.tagName as typeof allowedXhtml11Tags[number],
-        ) === -1
-    ) {
-      this.warn(
-        `Warning (content[${index}]): tag ${element.tagName} isn't allowed in EPUB 2/XHTML 1.1 DTD.`,
-      );
-      element.tagName = "div"; // yay for object-based trees
     }
   });
 
