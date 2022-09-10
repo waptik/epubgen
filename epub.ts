@@ -1,4 +1,4 @@
-import { JSZip, type JSZipGeneratorOptions, mime } from "./deps.ts";
+import { JSZip, type JSZipGeneratorOptions } from "./deps.ts";
 
 import { Image } from "./util/html.ts";
 import {
@@ -48,8 +48,9 @@ export class EPub {
       compression: "STORE",
     });
     if (this.options.cover) {
-      const mediaType = mime.getType(this.options.cover);
-      const extension = mime.getExtension(mediaType || ".jpg");
+      const mediaType = "image/jpeg";
+      const extension = "jpg";
+
       if (mediaType && extension) {
         this.cover = { mediaType, extension };
       }
@@ -128,6 +129,10 @@ export class EPub {
     });
     renderTemplate("toc.xhtml.ejs", opt).then((toc) => {
       this.zip.addFile("OEBPS/toc.xhtml", toc);
+    });
+
+    renderTemplate("cover.xhtml.ejs", { cover: this.cover }).then((cover) => {
+      this.zip.addFile("OEBPS/cover.xhtml", cover);
     });
   }
 
