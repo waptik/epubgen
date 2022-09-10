@@ -12,6 +12,6 @@ import epub from "https://deno.land/x/epubgen/mod.ts";
 
 epub(options).then(
   (content) => console.log("Ebook Generated Successfully!"),
-  (err) => console.error("Failed to generate Ebook because of ", err),
+  (err) => console.error("Failed to generate Ebook because of ", err)
 );
 ```
