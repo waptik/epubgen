@@ -23,13 +23,12 @@ export function fixHTML(this: EPub, index: number, html: string, imgCB: CB) {
 
   // reverse to make sure we transform innermost first
   selectAll<Node, Element>(allNodes, document).reverse().forEach((element) => {
-    console.log("element: ", element);
-
     for (const name of Object.keys(element.attribs)) {
       if (
         allowedAttributes.indexOf(name as typeof allowedAttributes[number]) ===
           -1
       ) {
+        console.log("tagName", element.tagName, "element: ", element);
         this.log("selectAll 1", { name });
         this.warn(
           `Warning (content[${index}]): attribute ${name} isn't allowed.`,
