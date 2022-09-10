@@ -28,8 +28,6 @@ export function fixHTML(this: EPub, index: number, html: string, imgCB: CB) {
         allowedAttributes.indexOf(name as typeof allowedAttributes[number]) ===
           -1
       ) {
-        console.log("tagName", element.tagName, "element: ", element);
-        this.log("selectAll 1", { name });
         this.warn(
           `Warning (content[${index}]): attribute ${name} isn't allowed.`,
         );
