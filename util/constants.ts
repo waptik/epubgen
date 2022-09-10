@@ -5,6 +5,8 @@ export const allowedAttributes = [
   "title",
   "src",
   "href",
+  "start",
+  "type",
   "about",
   "accesskey",
   "aria-activedescendant",
