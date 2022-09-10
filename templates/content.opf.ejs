@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package xmlns="http://www.idpf.org/2007/opf" 
-        version="3.0" 
+<package xmlns="http://www.idpf.org/2007/opf"
+        version="3.0"
         unique-identifier="BookId"
-        xmlns:dc="http://purl.org/dc/elements/1.1/" 
-        xmlns:dcterms="http://purl.org/dc/terms/" 
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/"
         xml:lang="en"
         xmlns:media="http://www.idpf.org/epub/vocab/overlays/#"
         prefix="ibooks: http://vocabulary.itunes.apple.com/rdf/ibooks/vocabulary-extensions-1.0/">
-    
-    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" 
+
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/"
               xmlns:opf="http://www.idpf.org/2007/opf">
         <dc:identifier id="BookId"><%= id %></dc:identifier>
         <meta refines="#BookId" property="identifier-type" scheme="onix:codelist5">22</meta>
@@ -48,7 +48,7 @@
             <item id="font_<%= index %>" href="fonts/<%= fonts[index].filename %>" media-type="<%= fonts[index].mediaType %>" />
         <% } %>
     </manifest>
-    
+
     <spine toc="ncx">
         <% if (cover) { %>
             <itemref idref="cover.xhtml" />
