@@ -24,6 +24,8 @@ export function fixHTML(this: EPub, index: number, html: string, imgCB: CB) {
   // reverse to make sure we transform innermost first
   selectAll<Node, Element>(allNodes, document).reverse().forEach((element) => {
     for (const name of Object.keys(element.attribs)) {
+      this.log("selectAll 1", { name });
+
       if (
         allowedAttributes.indexOf(name as typeof allowedAttributes[number]) ===
           -1
@@ -33,18 +35,6 @@ export function fixHTML(this: EPub, index: number, html: string, imgCB: CB) {
         );
         delete element.attribs[name];
       }
-    }
-
-    if (
-      this.options.version === 2 &&
-      allowedXhtml11Tags.indexOf(
-          element.tagName as typeof allowedXhtml11Tags[number],
-        ) === -1
-    ) {
-      this.warn(
-        `Warning (content[${index}]): tag ${element.tagName} isn't allowed in EPUB 2/XHTML 1.1 DTD.`,
-      );
-      element.tagName = "div"; // yay for object-based trees
     }
   });
 
