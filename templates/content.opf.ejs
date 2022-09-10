@@ -1,116 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="BookId"
-    xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xml:lang="en"
-    xmlns:media="http://www.idpf.org/epub/vocab/overlays/#"
-    prefix="ibooks: http://vocabulary.itunes.apple.com/rdf/ibooks/vocabulary-extensions-1.0/">
-    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:opf="http://www.idpf.org/2007/opf">
-        <dc:identifier id="BookId">
-            <%= id %>
-        </dc:identifier>
+<package xmlns="http://www.idpf.org/2007/opf"
+        version="3.0"
+        unique-identifier="BookId"
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:dcterms="http://purl.org/dc/terms/"
+        xml:lang="en"
+        xmlns:media="http://www.idpf.org/epub/vocab/overlays/#"
+        prefix="ibooks: http://vocabulary.itunes.apple.com/rdf/ibooks/vocabulary-extensions-1.0/">
+
+    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/"
+              xmlns:opf="http://www.idpf.org/2007/opf">
+        <dc:identifier id="BookId"><%= id %></dc:identifier>
         <meta refines="#BookId" property="identifier-type" scheme="onix:codelist5">22</meta>
         <meta property="dcterms:identifier" id="meta-identifier">BookId</meta>
-        <dc:title>
-            <%= title %>
-        </dc:title>
-        <meta property="dcterms:title" id="meta-title">
-        <%= title %>
-            </meta>
-            <dc:language>
-                <%= lang %>
-            </dc:language>
-            <meta property="dcterms:language" id="meta-language">
-            <%= lang %>
-                </meta>
-                <meta property="dcterms:modified">
-                <%= (new Date()).toISOString().split(".")[0]+ "Z" %>
-                    </meta>
-                    <dc:creator id="creator">
-                        <%= author.join(",") %>
-                    </dc:creator>
-                    <meta refines="#creator" property="file-as">
-                    <%= author.join(",") %>
-                        </meta>
-                        <meta property="dcterms:publisher">
-                        <%= publisher %>
-                            </meta>
-                            <dc:publisher>
-                                <%= publisher %>
-                            </dc:publisher>
-                            <meta property="dcterms:date">
-                            <%= date %>
-                                </meta>
-                                <dc:date>
-                                    <%= date %>
-                                </dc:date>
-                                <meta property="dcterms:rights">All rights reserved</meta>
-                                <dc:rights>Copyright &#x00A9; <%= (new Date()).getFullYear() %> by <%= publisher %>
-                                </dc:rights>="1.0" encoding="UTF-8"?>
-                                <package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="BookId"
-                                    xmlns:dc="http://purl.org/dc/elements/1.1/"
-                                    xmlns:dcterms="http://purl.org/dc/terms/" xml:lang="en"
-                                    xmlns:media="http://www.idpf.org/epub/vocab/overlays/#"
-                                    prefix="ibooks: http://vocabulary.itunes.apple.com/rdf/ibooks/vocabulary-extensions-1.0/">
-                                    <metadata xmlns:dc="http://purl.org/dc/elements/1.1/"
-                                        xmlns:opf="http://www.idpf.org/2007/opf">
-                                        <dc:identifier id="BookId">
-                                            <%= id %>
-                                        </dc:identifier>
-                                        <meta refines="#BookId" property="identifier-type" scheme="onix:codelist5">22
-                                        </meta>
+        <dc:title><%= title %></dc:title>
+        <meta property="dcterms:title" id="meta-title"><%= title %></meta>
+        <dc:language><%= lang %></dc:language>
+        <meta property="dcterms:language" id="meta-language"><%= lang %></meta>
+        <meta property="dcterms:modified"><%= (new Date()).toISOString().split(".")[0]+ "Z" %></meta>
+        <dc:creator id="creator"><%= author.join(",") %></dc:creator>
+        <meta refines="#creator" property="file-as"><%= author.join(",") %></meta>
+        <meta property="dcterms:publisher"><%= publisher %></meta>
+        <dc:publisher><%= publisher %></dc:publisher>
+        <meta property="dcterms:date"><%= date %></meta>
+        <dc:date><%= date %></dc:date>
+        <meta property="dcterms:rights">All rights reserved</meta>
+        <dc:rights>Copyright &#x00A9; <%= (new Date()).getFullYear() %> by <%= publisher %></dc:rights>
+        <% if(cover) { %>
+            <meta name="cover" content="image_cover" />
+        <% } %>
+    </metadata>
+    <manifest>
+        <item id="css" href="style.css" media-type="text/css" />
+        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml" />
+        <item id="toc" href="toc.xhtml" media-type="application/xhtml+xml" properties="nav" />
+        <% if(cover) { %>
+            <item id="cover.xhtml" href="cover.xhtml" media-type="application/xhtml+xml" />
+            <item id="image_cover" href="cover.<%= cover.extension %>" media-type="<%= cover.mediaType %>" properties="cover-image" />
+        <% } %>
+        <% for (let index=0; index < images.length; index++){ %>
+            <item id="image_<%= index %>" href="images/<%= images[index].id %>.<%= images[index].extension %>" media-type="<%= images[index].mediaType %>" />
+        <% } %>
+        <% for (let index=0; index < content.length; index++){ %>
+            <item id="content_<%= index %>_<%= content[index].id %>" href="<%= content[index].filename %>" media-type="application/xhtml+xml" />
+        <% } %>
+        <% for (let index=0; index < fonts.length; index++){ %>
+            <item id="font_<%= index %>" href="fonts/<%= fonts[index].filename %>" media-type="<%= fonts[index].mediaType %>" />
+        <% } %>
+    </manifest>
 
-                                        <% if(cover) { %>
-                                            <meta name="cover" content="image_cover" />
-                                            <% } %>
-                                                <meta name="generator" content="deno.epubgen" />
-                                                <meta property="ibooks:specified-fonts">true</meta>
-
-                                    </metadata>
-
-                                    <manifest>
-                                        <item id="ncx" href="toc.ncx" media-type="application/x-dtbncx+xml" />
-                                        <item id="toc" href="toc.xhtml" media-type="application/xhtml+xml"
-                                            properties="nav" />
-                                        <item id="css" href="style.css" media-type="text/css" />
-
-                                        <% if(cover) { %>
-                                            <item id="image_cover" href="cover.<%= cover.extension %>"
-                                                media-type="<%= cover.mediaType %>" />
-                                            <% } %>
-
-                                                <% for (let index=0; index < images.length; index++){ %>
-                                                    <item id="image_<%= index %>"
-                                                        href="images/<%= images[index].id %>.<%= images[index].extension %>"
-                                                        media-type="<%= images[index].mediaType %>" />
-                                                    <% } %>
-
-                                                        <% for (let index=0; index < content.length; index++){ %>
-                                                            <item id="content_<%= index %>_<%= content[index].id %>"
-                                                                href="<%= content[index].filename %>"
-                                                                media-type="application/xhtml+xml" />
-                                                            <% } %>
-
-                                                                <% for (let index=0; index < fonts.length; index++){ %>
-                                                                    <item id="font_<%= index %>"
-                                                                        href="fonts/<%= fonts[index].filename %>"
-                                                                        media-type="<%= fonts[index].mediaType %>" />
-                                                                    <% } %>
-                                    </manifest>
-
-                                    <spine toc="ncx">
-                                        <itemref idref="toc" />
-                                        <% for (let index=0; index < content.length; index++){ %>
-                                            <% if(content[index].beforeToc){ %>
-                                                <itemref idref="content_<%= index %>_<%= content[index].id %>" />
-                                                <% } %>
-                                                    <% } %>
-                                                        <% for (let index=0; index < content.length; index++){ %>
-                                                            <% if(!content[index].beforeToc){ %>
-                                                                <itemref
-                                                                    idref="content_<%= index %>_<%= content[index].id %>" />
-                                                                <% } %>
-                                                                    <% } %>
-                                    </spine>
-                                    <guide>
-                                        <reference type="text" title="Table of Content" href="toc.xhtml" />
-                                    </guide>
-                                </package>
+    <spine toc="ncx">
+        <% if (cover) { %>
+            <itemref idref="cover.xhtml" />
+        <% } %>
+        <itemref idref="toc" />
+        <% for (let index=0; index < content.length; index++){ %>
+            <% if(content[index].beforeToc){ %>
+                <itemref idref="content_<%= index %>_<%= content[index].id %>" />
+            <% } %>
+        <% } %>
+        <% for (let index=0; index < content.length; index++){ %>
+            <% if(!content[index].beforeToc){ %>
+                <itemref idref="content_<%= index %>_<%= content[index].id %>" />
+            <% } %>
+        <% } %>
+    </spine>
+    <guide>
+    <% if (cover) { %>
+        <reference type="cover" title="Cover" href="cover.xhtml" />
+    <% } %>
+        <reference type="text" title="Table of Content" href="toc.xhtml" />
+    </guide>
+</package>
