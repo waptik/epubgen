@@ -11,6 +11,7 @@ import {
   retryFetch,
   uuid,
 } from "./util/other.ts";
+import { buildBundle } from "./util/bundle.ts";
 import { Content, NormChapter, NormOptions, Options } from "./util/validate.ts";
 
 // import ejs from "https://esm.sh/ejs@3.1.8";
@@ -59,7 +60,7 @@ export class EPub {
 
   async render() {
     this.log("Generating Template Files...");
-    this.generateTemplateFiles();
+    await this.generateTemplateFiles();
     this.log("Downloading fonts...");
     await this.downloadAllFonts();
     this.log("Downloading images...");
@@ -71,17 +72,26 @@ export class EPub {
   }
 
   async genEpub() {
-    await this.render();
-    const content = this.zip.generateAsync({
-      type: "uint8array",
-      mimeType: "application/epub+zip",
-      compression: "DEFLATE",
-      compressionOptions: {
-        level: 9,
-      },
-    });
-    this.log("Done");
-    return content;
+    // if dev, generate bundle first
+    if (Deno.env.get("DEV") == "1") {
+      await buildBundle("./templates");
+    }
+    try {
+      await this.render();
+      const content = await this.zip.generateAsync({
+        type: "uint8array",
+        mimeType: "application/epub+zip",
+        compression: "DEFLATE",
+        compressionOptions: {
+          level: 9,
+        },
+      });
+      this.log("Done");
+      return content;
+    } catch (e) {
+      console.error(e);
+      throw e;
+    }
   }
 
   generateAsync(options: JSZipGeneratorOptions) {
@@ -93,7 +103,7 @@ export class EPub {
 
     this.zip.addFile("OEBPS/style.css", css);
 
-    this.content.forEach(async (chapter) => {
+    for (const chapter of this.content) {
       const rendered = await renderTemplate("chapter.xhtml.ejs", {
         lang: this.options.lang,
         prependChapterTitles: this.options.prependChapterTitles,
@@ -101,7 +111,7 @@ export class EPub {
       });
 
       this.zip.addFile(chapter.href, rendered);
-    });
+    }
 
     this.zip.addFile(
       "META-INF/container.xml",
@@ -121,19 +131,26 @@ export class EPub {
       content: this.content,
     };
 
-    renderTemplate("content.opf.ejs", opt).then((content) => {
+    // console.log("opt", opt);
+    await renderTemplate("content.opf.ejs", opt).then((content) => {
       this.zip.addFile("OEBPS/content.opf", content);
     });
-    renderTemplate("toc.ncx.ejs", opt).then((toc) => {
+    await renderTemplate("toc.ncx.ejs", opt).then((toc) => {
       this.zip.addFile("OEBPS/toc.ncx", toc);
     });
-    renderTemplate("toc.xhtml.ejs", opt).then((toc) => {
+    await renderTemplate("toc.xhtml.ejs", opt).then((toc) => {
       this.zip.addFile("OEBPS/toc.xhtml", toc);
     });
-
-    renderTemplate("cover.xhtml.ejs", { cover: this.cover }).then((cover) => {
-      this.zip.addFile("OEBPS/cover.xhtml", cover);
-    });
+    if (this.cover) {
+      await renderTemplate("cover.xhtml.ejs", {
+        ...this.options,
+        cover: this.cover,
+      }).then(
+        (cover) => {
+          this.zip.addFile("OEBPS/cover.xhtml", cover);
+        },
+      );
+    }
   }
 
   protected async downloadAllFonts() {
