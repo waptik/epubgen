@@ -3,6 +3,7 @@ export { normalizeSync as removeDiacritics } from "../deps.ts";
 export * from "./fetchable.ts";
 import { dejs, path } from "../deps.ts";
 import fetchable from "./fetchable.ts";
+import assets from "../assets.json" assert { type: "json" };
 
 export const encoder = new TextEncoder();
 
@@ -33,13 +34,18 @@ export const retryFetch = async (
   // last try, no catching
   return fetchable(url, timeout);
 };
-export async function fetchFileContent(file: string) {
-  const templatesGitHubURL =
-    "https://raw.githubusercontent.com/waptik/epubgen/main/templates";
-  const url = new URL(`${templatesGitHubURL}/${file}`, import.meta.url);
+export function fetchFileContent(file: string): Promise<string> {
+  // todo read user custom templates
 
-  const response = await fetch(url);
-  return await response.text();
+  return Promise.resolve(
+    (assets as Record<string, string>)[file],
+  );
+  // const templatesGitHubURL =
+  //   "https://raw.githubusercontent.com/waptik/epubgen/main/templates";
+  // const url = new URL(`${templatesGitHubURL}/${file}`, import.meta.url);
+  //
+  // const response = await fetch(url);
+  // return await response.text();
 }
 
 export const renderTemplate = (

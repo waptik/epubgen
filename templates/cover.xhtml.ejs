@@ -3,6 +3,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops" lang="en" xml:lang="en">
 
 <head>
+  <title>
+    <%= title %>
+  </title>
     <style>
         body {
             margin: 0em;
@@ -18,7 +21,9 @@
 
 <body>
     <div style="text-align: center; padding: 0pt; margin: 0pt;">
-        <img src="cover.<%= cover.extension %>" alt="Cover" />
+        <% if (cover) { %>
+          <img src="cover.<%= cover.extension %>" alt="Cover" />
+        <% } %>
     </div>
 </body>
 
