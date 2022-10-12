@@ -243,8 +243,6 @@ export class EPub {
           ""),
       );
 
-    // console.log("coverContent", coverContent);
-    // console.log("this.cover", this.cover);
     this.zip.addFile(`OEBPS/cover.${this.cover.extension}`, coverContent);
   }
 }

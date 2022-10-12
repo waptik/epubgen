@@ -36,16 +36,9 @@ export const retryFetch = async (
 };
 export function fetchFileContent(file: string): Promise<string> {
   // todo read user custom templates
-
   return Promise.resolve(
     (assets as Record<string, string>)[file],
   );
-  // const templatesGitHubURL =
-  //   "https://raw.githubusercontent.com/waptik/epubgen/main/templates";
-  // const url = new URL(`${templatesGitHubURL}/${file}`, import.meta.url);
-  //
-  // const response = await fetch(url);
-  // return await response.text();
 }
 
 export const renderTemplate = (
